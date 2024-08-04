@@ -1,0 +1,17 @@
+venv
+smartsuite/__pycache__/*
+accounts/__pycache__/*
+accounts/migrations/*
+api/__pycache__/*
+api/migrations/*
+courses/__pycache__/*
+courses/migrations/*
+batch/__pycache__/*
+batch/migrations/*
+departments/migrations/*
+semesters/migrations/*
+departments/__pycache__/*
+semesters/__pycache__/*
+SmartSuite.postman_collection.json
+qodana.yaml
+requirements.txt
