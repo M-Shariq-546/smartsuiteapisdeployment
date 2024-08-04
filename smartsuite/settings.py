@@ -28,7 +28,7 @@ DEBUG = True
 
 
 ALLOWED_HOSTS = [
-    '.vercel.app', '.now.sh', '127.0.0.1', 'localhost'
+    '.ondigitalocean.app', '.vercel.app', '.now.sh', '127.0.0.1', 'localhost'
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
