@@ -3,12 +3,24 @@ from .serializers import *
 from ..models import Batch
 from rest_framework.response import Response
 from rest_framework import status
-from .permissions import IsSuperAdmin
+from .permissions import *
+from rest_framework.permissions import IsAuthenticated
+
 
 class BatchModelViewSet(ModelViewSet):
     serializer_class = BatchSerializer
-    permission_classes = [IsSuperAdmin]
+    permission_classes = [IsAuthenticated]
     queryset = Batch.objects.filter(is_active=True)
+
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            permission_classes = [IsSuperAdmin]
+        elif self.action in ['retrieve', 'list']:
+            permission_classes = [IsSuperAdmin | IsTeacher]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
 
     def log_history(self, request , action , instance, changes=None):
         History.objects.create(

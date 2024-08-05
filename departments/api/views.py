@@ -1,15 +1,27 @@
 from rest_framework.viewsets import ModelViewSet
 from ..models import Department
-from .permissions import IsSuperAdmin
-from .serializers import DepartmentSerializers
+from .permissions import *
+from .serializers import DepartmentSerializers, TeachersofDepartment
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from history.models import History
 from accounts.models import CustomUser
+from rest_framework.permissions import IsAuthenticated
 class DepartmentModelViewSet(ModelViewSet):
     serializer_class = DepartmentSerializers
-    permission_classes = [IsSuperAdmin]
+    permission_classes = [IsAuthenticated]
     queryset = Department.objects.filter(is_active=True)
+
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            permission_classes = [IsSuperAdmin]
+        elif self.action in ['retrieve', 'list']:
+            permission_classes = [IsSuperAdmin | IsTeacher]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
 
     def log_history(self, request , action , instance, changes=None):
         field_mapping = {
@@ -44,7 +56,7 @@ class DepartmentModelViewSet(ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         response_data, instance = serializer.save()
-        self.log_history(request, 'CREATE', instance, request.data)
+        # self.log_history(request, 'CREATE', instance, "Department created")
         return Response(response_data, status=status.HTTP_200_OK)
     
     
@@ -62,7 +74,7 @@ class DepartmentModelViewSet(ModelViewSet):
         serializer = self.get_serializer(instance, data=request.data , partial=partial)
         serializer.is_valid(raise_exception=True)
         response_data, instance = serializer.save()
-        self.log_history(request, 'UPDATE', instance, request.data)
+        # self.log_history(request, 'UPDATE', instance, request.data)
         return Response(response_data, status=status.HTTP_200_OK)
     
     def retrieve(self, request, *args, **kwargs):
@@ -74,6 +86,35 @@ class DepartmentModelViewSet(ModelViewSet):
         instance = self.get_object()
         serializer = self.get_serializer()
         serializer.delete(instance)
-        self.log_history(request, 'DELETE', instance)
+        # self.log_history(request, 'DELETE', instance)
         return Response({"Success Message":f"Department with id {instance.id} has been deleted successfully"} , status=status.HTTP_200_OK)
-        
+
+
+class TeacherofDepartmentApiView(APIView):
+    serializer_class = TeachersofDepartment
+    permission_classes = [IsAuthenticated]
+    queryset = Department.objects.all()
+
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            permission_classes = [IsSuperAdmin]
+        elif self.action in ['retrieve', 'list']:
+            permission_classes = [IsSuperAdmin | IsTeacher]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+
+    def get(self, request, *args, **kwargs):
+        department_id = request.query_params.get('department')
+        if not department_id:
+            return Response({"error": "Department ID is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            department = Department.objects.get(id=department_id)
+        except Department.DoesNotExist:
+            return Response({"error": "Department not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        teachers = department.teacher.all()
+        serializer = self.serializer_class(teachers, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

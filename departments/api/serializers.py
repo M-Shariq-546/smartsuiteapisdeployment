@@ -5,6 +5,39 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.db import transaction
 from .validations import *
+
+
+class TeachersofDepartment(serializers.ModelSerializer):
+    teacher_first_name = serializers.SerializerMethodField(read_only=True)
+    teacher_last_name = serializers.SerializerMethodField(read_only=True)
+    teacher_father_name = serializers.SerializerMethodField(read_only=True)
+    teacher_cnic = serializers.SerializerMethodField(read_only=True)
+    teacher_phone_number = serializers.SerializerMethodField(read_only=True)
+    teacher_date_of_birth = serializers.SerializerMethodField(read_only=True)
+    class Meta:
+        model = Department
+        fields = ['id','teacher_first_name', 'teacher_last_name', 'teacher_father_name', 'teacher_cnic', 'teacher_phone_number', 'teacher_date_of_birth']
+
+    def get_teacher_first_name(self, obj):
+        return obj.first_name
+
+    def get_teacher_last_name(self, obj):
+        return obj.last_name
+
+    def get_teacher_father_name(self, obj):
+        return obj.father_name
+
+    def get_teacher_cnic(self, obj):
+        return obj.cnic
+
+    def get_teacher_phone_number(self, obj):
+        return obj.phone
+
+
+    def get_teacher_date_of_birth(self, obj):
+        return obj.date_of_birth
+
+
 class DepartmentSerializers(serializers.ModelSerializer):
     teachers = serializers.ListField(
         child=serializers.UUIDField(), write_only=True, required=True

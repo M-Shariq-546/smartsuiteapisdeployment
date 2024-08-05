@@ -1,0 +1,129 @@
+SmartSuite Backend Apis documentations
+
+Authentications:
+
+Super Admin Role:
+
+/api/create-account/     (POST)     (Super admin can create another superadmin , teacher and students on creation time email of student , teacher and super admin the newbie will receive email on that email. Email is soon start working.)
+
+/api/login/       (POST)            (login api will provide the all necessary details like JWT token for accessibility , first name, last name email role and each other stuff)
+payload = {
+    "first_name":"Superadmin",
+    "last_name":"admin2",
+    "father_name":"super admin",
+    "email":"superadmin2@gmail.com",
+    "phone":"+923072233222",
+    "date_of_birth":"2000-05-18",
+    "role":"Super Admin",
+    "cnic":"3520213238139",
+    "password":"testing@123"
+}
+
+
+/api/update-account/<uuid:id>/  (PUT or PATCH) (this end point provides the feature of update details of super admin to superadmin , superadmin to teacher, superadmin to students. Teacher cannot update student data in future this will be allowed)
+payload = any single or multiple or whole payload of above request could be used
+
+
+/api/delete-account/<uuid:id>/  (DELETE) (This endpoint is for delete the account of any student super admin or teacher)
+
+/api/teacher/ (GET) (list of all teachers in institute)
+
+/api/students/ (GET)  (list of all students in institute)
+
+/api/auth/users/me (GET) (Use this everytime when page reloaded)
+
+
+Department :
+
+/api/department/ (POST) (This api is for creation of department. This will not only create departments but also provides feature to add teachers in department on creation time we can also add teachers on another endpoint)
+payload = {
+    "name":"Information Technology",
+    "teachers":["f5ccd341-b0c1-4e10-aa26-e664772ae30a", "4ac35db9-5190-4935-8371-6b925ee7c5f1"]
+}
+
+
+/api/department/<uuid:id>/ (PUT OR PATCH) (This api is for update the department name and also this end point can use to add teachers in department)
+payload = {
+    "name":"Information Technology",
+    "teachers":["f5ccd341-b0c1-4e10-aa26-e664772ae30a", "4ac35db9-5190-4935-8371-6b925ee7c5f1"]
+}
+
+
+/api/department/<uuid:id>/ (GET) (This api is for get department details)
+
+
+/api/department/<uuid:id>/ (DELETE) (This api is for delete department which our app will not use this because an institute never delete the department from history)
+
+/api/department/ (GET)  (This api is for get all departments list)
+
+/api/departments/?teacher=4b98d858-bbe3-4233-90f7-c103c5a10376 (GET) (This is for teacher based department means to check teacher's association with department)
+
+/api/teachers_of_department/?department=95cfc27b-e30a-485a-a907-37cc95bf7b02 (GET) (this is to get the teachers list within a department)
+
+
+
+Course:
+
+/api/course/  (POST) (this api is for create a course within a department)
+payload = {
+    "name":"BS Islamic Scholars",
+    "department":"24c89f0a-5cd8-4568-8057-5ed0eafeaf9f"
+}
+
+
+/api/course/<uuid:id>/ (PUT or PATCH) (This api is for update the course name only)
+payload = {
+	"name":"BS Islamic Scholars"
+}
+
+/api/course/<uuid:id>/ (DELETE) (This api is for delete the course which is also not allowed)
+
+/api/course/?department=aec031a5-f245-4e37-99e1-af6fe0371196   (GET)  (This api is for getting courses within the department)
+
+
+Batch :
+
+/api/batch/  (POST) (This api is used for creating new Batch within a course and one interesting thing about this api is this api automatically creates the semesters within the same new created batch using threads)
+payload = {
+    "year":2020,
+    "course":"73889091-dc69-4a79-9be3-928813741d25",
+    "students":["afad7920-9e5e-4e5f-b438-7df9b336242a"] // this could me more in list as well as student is belongings of course and nothing else
+}
+
+
+/api/batch/ (DELETE) (this api is for deleting batch)
+
+update and get is not allowed
+
+
+Semesters:
+
+/api/semesters/?course=70e10d6e-aa56-4925-9854-e375302fb2d7&batch=addd082d-06ba-4467-9fdd-5286472ab0db   (GET) (this api is for getting the semesters list for exact batch and course using their ids)
+
+
+
+Subject:
+
+/api/subject/ (POST) (this api is used for adding new subject in semester)
+payload = {
+    "name":"Data Structure",
+    "subject_code":"IT-302",
+    "description":"This course is about the basics of opretaing system and help students to get detailed knowledge of OS",
+    "semester":"48b96062-583f-481e-8991-d105943bded5"
+}
+
+
+/api/subjects/?semester=48b96062-583f-481e-8991-d105943bded5   (GET) (this api is for getting subjects list in semester whose id is in query params)
+
+
+
+Files:
+
+/api/documents/ (POST) (this api is used for uploading the files within a subject by the teacher . A teacher can update multiple files at a time as well)  payload = will show on Meeting
+
+/api/documents/?subject=27a5bcf3-e0d6-4a16-b679-a27a6471f0f0 (GET) (this api is for getting files documents within a subject uploaded by the teacher)
+
+
+History:
+
+/api/histories/  (GET) (this api keeps track of all the history of a particular user using their id)

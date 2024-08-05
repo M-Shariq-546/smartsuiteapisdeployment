@@ -29,7 +29,6 @@ class PDFFiles(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        self.is_active=True
         if self.file is not None and self.name is None:
             self.name = self.file.name
         super().save(*args, **kwargs)

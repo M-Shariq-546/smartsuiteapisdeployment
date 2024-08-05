@@ -1,15 +1,25 @@
 from rest_framework.viewsets import ModelViewSet
 from .serializers import CoursesSerializer
 from ..models import Course
-from .permissions import IsSuperAdmin
+from .permissions import *
 from rest_framework.response import Response
 from rest_framework import status
 from history.models import History
+from rest_framework.permissions import IsAuthenticated
 
 class CoursesApiView(ModelViewSet):
     serializer_class = CoursesSerializer
-    permissions_classes = [IsSuperAdmin]
+    permission_classes = [IsAuthenticated]
     queryset = Course.objects.filter(is_active=True)
+
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            permission_classes = [IsSuperAdmin]
+        elif self.action in ['retrieve', 'list']:
+            permission_classes = [IsSuperAdmin | IsTeacher]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
     def log_history(self, request , action , instance, changes=None):
         if changes is not None:

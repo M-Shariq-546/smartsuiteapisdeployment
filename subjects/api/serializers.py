@@ -27,11 +27,13 @@ class PDFSerializers(serializers.ModelSerializer):
             responses.append(response)
         return responses
 
-
-    def update(self, validate_data):
-        updated_files = PDFFiles.objects.update(**validated_data)
-        updated_files.save()
-        return updated_files
+    def update(self, instance, validated_data):
+        instance.subject = validated_data.get('subject', instance.subject)
+        instance.name = validated_data.get('name', instance.name)
+        instance.file = validated_data.get('file', instance.file)
+        instance.is_active = validated_data.get('is_active', instance.is_active)
+        instance.save()
+        return instance
 
 class SubjectSerializer(serializers.ModelSerializer):
     class Meta:

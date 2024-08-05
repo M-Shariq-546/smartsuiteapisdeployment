@@ -5,7 +5,7 @@ from .views import *
 router = DefaultRouter()
 
 router.register(r'subjects', SubjectsModelViewSet, basename="crud_subjects")
-router.register(r'documents', FilesModelViewSet, basename="Files")
+router.register(r'files', SubjectFilesModelViewSet, basename='subject_files')
 
 urlpatterns = [
     path('',include(router.urls)),
