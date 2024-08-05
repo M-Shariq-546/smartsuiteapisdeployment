@@ -3,6 +3,7 @@ from .serializers import *
 from ..models import Batch
 from rest_framework.response import Response
 from rest_framework import status
+from history.models import History
 from .permissions import *
 from rest_framework.permissions import IsAuthenticated
 
