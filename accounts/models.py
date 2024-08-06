@@ -14,6 +14,7 @@ class CustomUser(AbstractUser):
     father_name = models.CharField(max_length=100, null=True , blank=True)
     username = None
     email = models.EmailField(('email address'), unique=True)
+    address = models.CharField(max_length=500, null=True, blank=True)
     cnic = models.CharField(max_length=13, unique=True, blank=True, null=True)
     date_of_birth = models.DateField(null=True, blank=True)
     phone = PhoneNumberField(null=True, blank=True)

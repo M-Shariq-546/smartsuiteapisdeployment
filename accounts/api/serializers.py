@@ -5,7 +5,7 @@ class CustomUserDetailSerializer(serializers.ModelSerializer):
     age = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = CustomUser
-        fields = ['id', 'first_name', 'last_name', 'father_name', 'cnic', 'date_of_birth', 'age', 'email', 'phone', 'role', 'created_at']
+        fields = ['id', 'first_name', 'last_name', 'father_name', 'cnic', 'address', 'date_of_birth', 'age', 'email', 'phone', 'role', 'created_at']
 
     def get_age(self, obj):
         if obj.date_of_birth:
@@ -20,7 +20,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'first_name', 'last_name', 'father_name', 'cnic', 'date_of_birth', 'age', 'email', 'phone', 'role', 'created_at']
+        fields = ['id', 'first_name', 'last_name', 'father_name', 'cnic', 'address', 'date_of_birth', 'age', 'email', 'phone', 'role', 'created_at']
         extra_kwargs = {
             'groups':{'required':False},
             'user_permissions': {'required': False},
@@ -47,7 +47,7 @@ class CustomStudentUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomDepartmentStudent
-        fields = ['id', 'first_name', 'last_name', 'father_name', 'cnic', 'date_of_birth', 'age', 'email', 'phone', 'role', 'college_roll_number', 'university_roll_number', 'created_at']
+        fields = ['id', 'first_name', 'last_name', 'father_name', 'cnic', 'address', 'date_of_birth', 'age', 'email', 'phone', 'role', 'college_roll_number', 'university_roll_number', 'created_at']
         extra_kwargs = {
             'groups':{'required':False},
             'user_permissions': {'required': False},
