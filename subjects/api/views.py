@@ -63,7 +63,7 @@ class SubjectFilesModelViewSet(ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         response, instance = serializer.save()
-        self.log_history(request, 'CREATE', instance, f"File {instance['name']} added")
+        self.log_history(request, 'CREATE', instance, f"File(s) added Successfully")
         return Response(response, status=status.HTTP_201_CREATED)
 
 

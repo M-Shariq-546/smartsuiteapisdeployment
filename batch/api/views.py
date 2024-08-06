@@ -3,6 +3,7 @@ from .serializers import *
 from ..models import Batch
 from rest_framework.response import Response
 from rest_framework import status
+from history.models import History
 from .permissions import *
 from rest_framework.permissions import IsAuthenticated
 
@@ -34,7 +35,7 @@ class BatchModelViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        response_data = serializer.save()
+        response_data, instance = serializer.save()
         self.log_history(request, 'CREATE', instance, request.data)
         return Response(response_data, status=status.HTTP_201_CREATED)
 

@@ -14,6 +14,8 @@ class PDFSerializers(serializers.ModelSerializer):
             file_data = validated_data.copy()
             file_data['file'] = file
             new_file = PDFFiles.objects.create(**file_data)
+            new_file.is_active = True
+            new_file.save()
             new_files.append(new_file)
         responses = []
         for new_file in new_files:
@@ -25,7 +27,7 @@ class PDFSerializers(serializers.ModelSerializer):
                 'is_active':new_file.is_active
             }
             responses.append(response)
-        return responses
+        return responses, new_file
 
     def update(self, instance, validated_data):
         instance.subject = validated_data.get('subject', instance.subject)
