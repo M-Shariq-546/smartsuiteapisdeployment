@@ -21,7 +21,7 @@ class CustomUser(AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
     added_by = models.ForeignKey("self", models.CASCADE, default=None, null=True)
-    
+
     groups = models.ManyToManyField(Group, related_name='customuser_set')
     user_permissions = models.ManyToManyField(Permission, related_name='customuser_set')
     
@@ -40,19 +40,29 @@ class CustomUser(AbstractUser):
 
 # CustomCompanyUser
 class CustomDepartmentTeacher(CustomUser):
-    CustomUser.role = 'Teacher'
+    employee_code = models.CharField(max_length=100, unique=True)
+    # CustomUser.role = 'Teacher'
     class Meta:
-        proxy = True
+        # proxy = True
         verbose_name = ("Department Teacher")
         verbose_name_plural = ("Department Teachers")
+
+    def save(self, *args, **kwargs):
+        self.role = 'Teacher'
+        super().save(*args, **kwargs)
 # CustomCompanyTeamUser
 class CustomDepartmentStudent(CustomUser):
-    CustomUser.role = 'Student'
+    college_roll_number = models.CharField(max_length=100, unique=True)
+    university_roll_number = models.CharField(max_length=100, unique=True)
+    # CustomUser.role = 'Student'
     class Meta:
-        proxy = True
+        # proxy = True
         verbose_name = ("Department Student")
         verbose_name_plural = ("Department Students")
 
+    def save(self, *args, **kwargs):
+        self.role = 'Student'
+        super().save(*args, **kwargs)
 
 class MyAdminSite(AdminSite):
     

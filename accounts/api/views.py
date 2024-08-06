@@ -2,9 +2,9 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView, UpdateAPIView , DestroyAPIView , ListAPIView
-from .serializers import CustomUserDetailSerializer , CustomUserSerializer
+from .serializers import CustomUserDetailSerializer , CustomUserSerializer, CustomStudentUserSerializer, CustomTeacherUserSerializer
 from rest_framework.permissions import IsAuthenticated
-from accounts.models import CustomUser
+from accounts.models import CustomUser, CustomDepartmentTeacher, CustomDepartmentStudent
 from rest_framework import status , serializers
 from django.contrib.auth import authenticate
 from django.http import JsonResponse
@@ -28,11 +28,10 @@ class LoginApiView(APIView):
         if user:
             # Additional data checking (e.g., existence in DB)
             try:
-                user_data = CustomUser.objects.get(email=email)
-                serializer = CustomUserDetailSerializer(user_data)  # Use CustomUserDetailSerializer
-                if serializer.data['role'] == 'Teacher':
-                    # admin = AdminUser.objects.get(admin=serializer.data['id'])
-                    
+                if user.role == 'Teacher':
+                    user_data = CustomDepartmentTeacher.objects.get(email=email)
+                    serializer = CustomTeacherUserSerializer(user_data)
+
                     refresh = RefreshToken.for_user(user)
                     token = {
                     'refresh': str(refresh),
@@ -46,11 +45,15 @@ class LoginApiView(APIView):
                         'phone': serializer.data['phone'],
                         'email': serializer.data['email'],
                         'cnic':serializer.data['cnic'],
+                        'date_of_birth':serializer.data['date_of_birth'],
+                        'age':serializer.data['age'],
                         'role': serializer.data['role'],
+                        'employee_code':serializer.data['employee_code'],
                         'created_at': serializer.data['created_at'],
                     }
-                
-                elif serializer.data['role'] == 'Student':
+                elif user.role == 'Student':
+                    user_data = CustomDepartmentStudent.objects.get(email=email)
+                    serializer = CustomStudentUserSerializer(user_data)
                     refresh = RefreshToken.for_user(user)
                     token = {
                         'refresh': str(refresh),
@@ -64,6 +67,10 @@ class LoginApiView(APIView):
                         'phone': serializer.data['phone'],
                         'email': serializer.data['email'],
                         'cnic': serializer.data['cnic'],
+                        'date_of_birth': serializer.data['date_of_birth'],
+                        'age': serializer.data['age'],
+                        'college_roll_number':serializer.data['college_roll_number'],
+                        'university_roll_number':serializer.data['university_roll_number'],
                         'created_at': serializer.data['created_at'],
                     }
                 else:
@@ -82,6 +89,8 @@ class LoginApiView(APIView):
                         'phone': serializer.data['phone'],
                         'email': serializer.data['email'],
                         'cnic': serializer.data['cnic'],
+                        'date_of_birth':serializer.data['date_of_birth'],
+                        'age':serializer.data['age'],
                         'role': serializer.data['role'],
                         'created_at': serializer.data['created_at'],
                     }
@@ -94,14 +103,14 @@ class LoginApiView(APIView):
 
 
 class TeachersListApiView(ListAPIView):
-    serializer_class = CustomUserDetailSerializer
+    serializer_class = CustomTeacherUserSerializer
     permission_classes = [IsSuperAdmin]
-    queryset = CustomUser.objects.filter(role='Teacher')
+    queryset = CustomDepartmentTeacher.objects.all()
 
 class StudentsListApiView(ListAPIView):
-    serializer_class = CustomUserDetailSerializer
+    serializer_class = CustomStudentUserSerializer
     permission_classes = [IsSuperAdmin]
-    queryset = CustomUser.objects.filter(role='Student')
+    queryset = CustomDepartmentStudent.objects.all()
 
 class CreateUsersApiView(CreateAPIView):
     serializer_class = CustomUserSerializer
@@ -137,13 +146,29 @@ class CreateUsersApiView(CreateAPIView):
 
         request.data['added_by'] = request.user.id
         password = request.data.pop('password')
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save(password=make_password(password))
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-    
+        if new_requested_role == 'Teacher':
+            serializer = CustomTeacherUserSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            user = serializer.save(password=make_password(password))
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        elif new_requested_role == 'Student':
+            serializer = CustomStudentUserSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            user = serializer.save(password=make_password(password))
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        else:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            user = serializer.save(password=make_password(password))
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
 class UpdateAccountApiView(UpdateAPIView):
     serializer_class = CustomUserSerializer
     queryset = CustomUser.objects.all()
@@ -161,20 +186,39 @@ class UpdateAccountApiView(UpdateAPIView):
     
     def update(self , request , *args , **kwargs):
         instance = self.get_object()
-        partial = kwargs.pop('partial', False)
-        serializer = self.get_serializer(instance , data=request.data , partial=partial)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data , status=status.HTTP_200_OK)
-        
+        if isinstance(instance, CustomDepartmentStudent):
+            partial = kwargs.pop('partial', False)
+            serializer = CustomStudentUserSerializer(instance , data=request.data , partial=partial)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data , status=status.HTTP_200_OK)
+        elif isinstance(instance, CustomDepartmentTeacher):
+            partial = kwargs.pop('partial', False)
+            serializer = CustomTeacherUserSerializer(instance, data=request.data, partial=partial)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            partial = kwargs.pop('partial', False)
+            serializer = self.get_serializer(instance, data=request.data, partial=partial)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
 class DeleteCustomUserApiView(DestroyAPIView):
     serializer_class = CustomUserSerializer
     queryset = CustomUser.objects.all()
     lookup_field = 'id'
-    
-    def destroy(self, request, *args, **kwargs):
-        user = request.user
-        if user.role == 'Super Admin':
-            pass
-        return super().destroy(request, *args, **kwargs)
-    
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        if isinstance(instance, CustomDepartmentStudent):
+            model = CustomDepartmentStudent
+        elif isinstance(instance, CustomDepartmentTeacher):
+            model = CustomDepartmentTeacher
+        else:
+            model = CustomUser
+
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
