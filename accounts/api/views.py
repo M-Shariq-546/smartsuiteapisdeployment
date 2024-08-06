@@ -10,9 +10,11 @@ from django.contrib.auth import authenticate
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import get_object_or_404
+from .utils import *
 from django.core.mail import send_mail
 from django.conf import settings
 from .permissions import IsSuperAdmin
+from threading import Thread
 
 class LoginApiView(APIView):
     authentication_classes = []
@@ -149,6 +151,7 @@ class CreateUsersApiView(CreateAPIView):
         if new_requested_role == 'Teacher':
             serializer = CustomTeacherUserSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
+            Thread(target=send_mail_to_new_creation, args=(email, password, new_requested_role)).start()
             user = serializer.save(password=make_password(password))
             self.perform_create(serializer)
             headers = self.get_success_headers(serializer.data)
@@ -156,6 +159,7 @@ class CreateUsersApiView(CreateAPIView):
         elif new_requested_role == 'Student':
             serializer = CustomStudentUserSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
+            Thread(target=send_mail_to_new_creation, args=(email, password, new_requested_role)).start()
             user = serializer.save(password=make_password(password))
             self.perform_create(serializer)
             headers = self.get_success_headers(serializer.data)
@@ -163,6 +167,7 @@ class CreateUsersApiView(CreateAPIView):
         else:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
+            Thread(target=send_mail_to_new_creation, args=(email, password, new_requested_role)).start()
             user = serializer.save(password=make_password(password))
             self.perform_create(serializer)
             headers = self.get_success_headers(serializer.data)
