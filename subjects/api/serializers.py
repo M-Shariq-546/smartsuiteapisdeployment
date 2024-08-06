@@ -25,7 +25,7 @@ class PDFSerializers(serializers.ModelSerializer):
                 'is_active':new_file.is_active
             }
             responses.append(response)
-        return responses
+        return responses, new_file
 
     def update(self, instance, validated_data):
         instance.subject = validated_data.get('subject', instance.subject)
