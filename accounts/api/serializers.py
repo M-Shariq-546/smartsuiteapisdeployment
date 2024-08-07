@@ -26,7 +26,7 @@ class CustomUserDetailSerializer(serializers.ModelSerializer):
 
     def get_age(self, obj):
         if obj.date_of_birth:
-            today = datetime.today()
+            today = datetime.datetime.today()
             age = today.year - obj.date_of_birth.year - (
                         (today.month, today.day) < (obj.date_of_birth.month, obj.date_of_birth.day))
             return age
@@ -53,7 +53,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     def get_age(self, obj):
         if obj.date_of_birth:
-            today = datetime.today()
+            today = datetime.datetime.today()
             age = today.year - obj.date_of_birth.year - (
                         (today.month, today.day) < (obj.date_of_birth.month, obj.date_of_birth.day))
             return age
@@ -119,7 +119,7 @@ class CustomStudentUserSerializer(serializers.ModelSerializer):
 
     def get_age(self, obj):
         if obj.date_of_birth:
-            today = datetime.today()
+            today = datetime.datetime.today()
             age = today.year - obj.date_of_birth.year - (
                         (today.month, today.day) < (obj.date_of_birth.month, obj.date_of_birth.day))
             return age
@@ -134,7 +134,7 @@ class CustomTeacherUserDetailSerializer(serializers.ModelSerializer):
 
     def get_age(self, obj):
         if obj.date_of_birth:
-            today = datetime.today()
+            today = datetime.datetime.today()
             age = today.year - obj.date_of_birth.year - (
                         (today.month, today.day) < (obj.date_of_birth.month, obj.date_of_birth.day))
             return age
@@ -150,7 +150,7 @@ class CustomStudentUserDetailSerializer(serializers.ModelSerializer):
 
     def get_age(self, obj):
         if obj.date_of_birth:
-            today = datetime.today()
+            today = datetime.datetime.today()
             age = today.year - obj.date_of_birth.year - (
                         (today.month, today.day) < (obj.date_of_birth.month, obj.date_of_birth.day))
             return age
@@ -214,7 +214,7 @@ class CustomTeacherUserSerializer(serializers.ModelSerializer):
 
     def get_age(self, obj):
         if obj.date_of_birth:
-            today = datetime.today()
+            today = datetime.datetime.today()
             age = today.year - obj.date_of_birth.year - (
                         (today.month, today.day) < (obj.date_of_birth.month, obj.date_of_birth.day))
             return age
