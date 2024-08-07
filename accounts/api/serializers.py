@@ -218,3 +218,4 @@ class CustomTeacherUserSerializer(serializers.ModelSerializer):
                         (today.month, today.day) < (obj.date_of_birth.month, obj.date_of_birth.day))
             return age
         return None
+
