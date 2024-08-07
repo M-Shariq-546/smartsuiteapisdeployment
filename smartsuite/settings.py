@@ -88,30 +88,16 @@ WSGI_APPLICATION = 'smartsuite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'smartsuite',
-#         'USER':'postgres',
-#         'PASSWORD':'admin',
-#         'HOST':'localhost',
-#     }
-# }
-
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'defaultdb',
-        'USER': 'doadmin',
-        'PASSWORD': 'AVNS_WBMn1ppu4nuMAe2KY3y',
-        'HOST': 'smartsuite-do-user-17418568-0.h.db.ondigitalocean.com',
-        'PORT': '25060',
-        'OPTIONS': {
-            'sslmode': 'require',
-        },
+        'NAME': 'smartsuite',
+        'USER':'postgres',
+        'PASSWORD':'admin',
+        'HOST':'localhost',
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -157,7 +143,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

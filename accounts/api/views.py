@@ -103,9 +103,6 @@ class LoginApiView(APIView):
                         'date_of_birth':serializer.data['date_of_birth'],
                         'age':serializer.data['age'],
                         'role': serializer.data['role'],
-                        'total_departments':serializer.data['departments'],
-                        'total_teachers':serializer.data['teachers'],
-                        'total_students':serializer.data['students'],
                         'created_at': serializer.data['created_at'],
                     }
             except CustomUser.DoesNotExist:
@@ -276,7 +273,13 @@ class StudentCountView(APIView):
 
         # Adding the current year count separately if not included
         current_year_data = Batch.objects.filter(year=current_year_value, is_active=True).aggregate(count=Count('student'))
+        total_teachers = CustomDepartmentTeacher.objects.all().count()
+        total_students = CustomDepartmentStudent.objects.all().count()
+        total_departments = Department.objects.filter(is_active=True).count()
         response_data = {
+            'total_teachers': total_teachers,
+            'total_students': total_students,
+            'total_departments':total_departments,
             'current_year': current_year_data['count'],
             'past_years': [{'year': year, 'count': data[year]} for year in past_years_range]
         }

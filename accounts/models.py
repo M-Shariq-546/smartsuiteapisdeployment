@@ -84,6 +84,9 @@ class MyAdminSite(AdminSite):
             "Subjects":9,
             "PDFiles":10,
             "Histories":11,
+            "Summaries":12,
+            "Keypoints":13,
+            "Quizes":14,
         }
 
         app_dict = self._build_app_dict(request, app_label)

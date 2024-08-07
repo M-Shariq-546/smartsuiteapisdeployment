@@ -12,6 +12,11 @@ departments/migrations/*
 semesters/migrations/*
 departments/__pycache__/*
 semesters/__pycache__/*
+subjects/__pycache__/*
+subjects/api/migrations/*
+subjects/api/__pycache__/*
 SmartSuite.postman_collection.json
 qodana.yaml
 requirements.txt
+vercel.json
+build_files.sh

@@ -9,5 +9,7 @@ router.register(r'files', SubjectFilesModelViewSet, basename='subject_files')
 
 urlpatterns = [
     path('',include(router.urls)),
+    path('summary/', CreateSummaryApiView.as_view(), name='summary'),
+    path('keypoints/', CreateKeypointApiView.as_view(), name='keypoints'),
 ]
 
