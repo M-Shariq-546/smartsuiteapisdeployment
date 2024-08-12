@@ -98,7 +98,7 @@ class SubjectFilesModelViewSet(ModelViewSet):
 
 '''
 # Summary Keypoints and Quizes Sections is going from below
-
+'''
 class CreateSummaryApiView(APIView):
     def post(self, request):
         user = request.user
@@ -204,5 +204,9 @@ class CreateKeypointApiView(APIView):
                                  "prompt": f"{created_keypoint.prompt}"}, status=status.HTTP_200_OK)
         return Response({"Access Denied": "You Are not Allowed to create summary"},
                             status=status.HTTP_401_UNAUTHORIZED)
+<<<<<<< HEAD
 
 '''
+=======
+'''
+>>>>>>> abc853ee88a2d9bb94413ca15a90807c0f6bbf88
