@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from history.models import History
 from .serializers import *
-from .gpts import *
+# from .gpts import *
 from .permissions import *
 from rest_framework.permissions import IsAuthenticated
 
@@ -34,7 +34,7 @@ class SubjectsModelViewSet(ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response({"message":"Subject Added In Course Successfully"}, status=status.HTTP_201_CREATED)
 
     def update(self, request, *args, **kwargs):
         self.permission_denied(request)
@@ -66,7 +66,7 @@ class SubjectFilesModelViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         response, instance = serializer.save()
         self.log_history(request, 'CREATE', instance, f"File(s) added suucessfully")
-        return Response(response, status=status.HTTP_201_CREATED)
+        return Response({"message":"File(s) Added Successfully"}, status=status.HTTP_201_CREATED)
 
 
     def put(self, request, *args, **kwargs):
@@ -84,22 +84,19 @@ class SubjectFilesModelViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         instance = serializer.save()
         self.log_history(request, 'UPDATE', instance , f"File {instance.name} updated")
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({"message":"File Updated Successfully"}, status=status.HTTP_200_OK)
 
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance_id = instance.id
-        print(instance.is_active)
         instance.is_active = False
         instance.save()
-        print(instance.is_active)
-        print(instance_id)
         self.log_history(request, 'DELETE', instance)
         return Response({"Deleted":f"This File {instance_id} has been deleted successfully"}, status=status.HTTP_200_OK)
 
 
-
+'''
 # Summary Keypoints and Quizes Sections is going from below
 
 class CreateSummaryApiView(APIView):
@@ -208,3 +205,4 @@ class CreateKeypointApiView(APIView):
         return Response({"Access Denied": "You Are not Allowed to create summary"},
                             status=status.HTTP_401_UNAUTHORIZED)
 
+'''

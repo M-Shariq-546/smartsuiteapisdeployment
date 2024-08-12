@@ -179,16 +179,18 @@ class CreateUsersApiView(CreateAPIView):
         request.data['added_by'] = request.user.id
         if new_requested_role == 'Teacher':
             serializer = CustomTeacherUserSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            response , instance = serializer.save()
-            self.log_history(request, "CREATE", instance, f"New Student {instance.first_name} {instance.last_name} Added Successfully")
-            return Response(response, status=status.HTTP_201_CREATED)
+            if serializer.is_valid(raise_exception=True):
+                response , instance = serializer.save()
+                self.log_history(request, "CREATE", instance, f"New Student {instance.first_name} {instance.last_name} Added Successfully")
+                return Response({"message":"Teacher Created Successfully"}, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         elif new_requested_role == 'Student':
             serializer = CustomStudentUserSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            response , instance = serializer.save()
-            self.log_history(request, "CREATE", instance, f"New Teacher {instance.first_name} {instance.last_name} Added Successfully")
-            return Response(response, status=status.HTTP_201_CREATED)
+            if serializer.is_valid(raise_exception=True):
+                response , instance = serializer.save()
+                self.log_history(request, "CREATE", instance, f"New Teacher {instance.first_name} {instance.last_name} Added Successfully")
+                return Response({"message":"Student Created Successfully"}, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -216,21 +218,23 @@ class UpdateAccountApiView(UpdateAPIView):
         if isinstance(instance, CustomDepartmentStudent):
             partial = kwargs.pop('partial', False)
             serializer = CustomStudentUserSerializer(instance , data=request.data , partial=partial)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data , status=status.HTTP_200_OK)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response({"message":"Successfully updated Student Data", "data":serializer.data} , status=status.HTTP_200_OK)
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
         elif isinstance(instance, CustomDepartmentTeacher):
             partial = kwargs.pop('partial', False)
             serializer = CustomTeacherUserSerializer(instance, data=request.data, partial=partial)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response({"message":"Successfully updated Teacher Data", "data":serializer.data}, status=status.HTTP_200_OK)
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             partial = kwargs.pop('partial', False)
             serializer = self.get_serializer(instance, data=request.data, partial=partial)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response({"message": "Data updated Successfully", "data": serializer.data}, status=status.HTTP_200_OK)
 
 class DeleteCustomUserApiView(DestroyAPIView):
     serializer_class = CustomUserSerializer
@@ -248,7 +252,7 @@ class DeleteCustomUserApiView(DestroyAPIView):
             model = CustomUser
 
         self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({"message":"Deleted Successfully"},status=status.HTTP_204_NO_CONTENT)
 
 # This is the permission less Api for getting students and departements and teachers data
 class StudentCountView(APIView):

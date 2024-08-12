@@ -48,11 +48,11 @@ class CoursesApiView(ModelViewSet):
 
     def create(self , request , *args , **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        response, instance = serializer.save()
-        self.log_history(request, 'CREATE', instance, request.data)
-        return Response(response , status=status.HTTP_200_OK)
-
+        if serializer.is_valid(raise_exception=True):
+            response, instance = serializer.save()
+            self.log_history(request, 'CREATE', instance, request.data)
+            return Response({"message":"Course Created Successfully"} , status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     def put(self, request , *args , **kwargs):
         kwargs['partial'] = False
         return  self.update(request, *args , **kwargs)
@@ -65,21 +65,22 @@ class CoursesApiView(ModelViewSet):
         instance = self.get_object()
         partial = kwargs.pop('partial', False)
         serializer = self.get_serializer(instance , data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        changes = {}
-        for field in request.data:
-            if hasattr(instance, field):
-                model_value = getattr(instance, field)
-                request_value = request.data[field]
-                if model_value != request_value:
-                    changes[field] = (model_value, request_value)
-        response, instance = serializer.save()
-        self.log_history(request, 'UPDATE', instance, changes)
-        return Response(response, status=status.HTTP_200_OK)
+        if serializer.is_valid(raise_exception=True):
+            changes = {}
+            for field in request.data:
+                if hasattr(instance, field):
+                    model_value = getattr(instance, field)
+                    request_value = request.data[field]
+                    if model_value != request_value:
+                        changes[field] = (model_value, request_value)
+            response, instance = serializer.save()
+            self.log_history(request, 'UPDATE', instance, changes)
+            return Response({"message":"Course Updated Successfully"}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer()
         serializer.delete(instance)
         self.log_history(request, 'DELETE', instance)
-        return Response({"Deleted Successfully":f"This Course {instance.id} has been deleted successfully"}, status=status.HTTP_200_OK)
+        return Response({"message":f"This Course {instance.id} has been deleted successfully"}, status=status.HTTP_200_OK)
