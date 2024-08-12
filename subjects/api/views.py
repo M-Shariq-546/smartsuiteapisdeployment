@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from history.models import History
 from .serializers import *
-from .gpts import *
+# from .gpts import *
 from .permissions import *
 from rest_framework.permissions import IsAuthenticated
 
@@ -101,7 +101,7 @@ class SubjectFilesModelViewSet(ModelViewSet):
 
 
 # Summary Keypoints and Quizes Sections is going from below
-
+'''
 class CreateSummaryApiView(APIView):
     def post(self, request):
         user = request.user
