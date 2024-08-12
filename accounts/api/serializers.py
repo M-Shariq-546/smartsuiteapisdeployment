@@ -1,9 +1,6 @@
 from rest_framework import serializers
 from accounts.models import CustomUser, CustomDepartmentStudent, CustomDepartmentTeacher
-<<<<<<< HEAD
-=======
 # from datetime import datetime
->>>>>>> 07a3d40485f80fe6d998cd5cb05da7e7b8da65c4
 import datetime
 from .utils import *
 from threading import Thread
