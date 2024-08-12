@@ -207,4 +207,4 @@ class CreateKeypointApiView(APIView):
                                  "prompt": f"{created_keypoint.prompt}"}, status=status.HTTP_200_OK)
         return Response({"Access Denied": "You Are not Allowed to create summary"},
                             status=status.HTTP_401_UNAUTHORIZED)
-
+'''
