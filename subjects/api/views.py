@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from history.models import History
 from .serializers import *
-# from .gpts import *
+from .gpts import *
 from .permissions import *
 from rest_framework.permissions import IsAuthenticated
 
@@ -96,7 +96,6 @@ class SubjectFilesModelViewSet(ModelViewSet):
         return Response({"Deleted":f"This File {instance_id} has been deleted successfully"}, status=status.HTTP_200_OK)
 
 
-'''
 # Summary Keypoints and Quizes Sections is going from below
 
 class CreateSummaryApiView(APIView):
@@ -204,4 +203,3 @@ class CreateKeypointApiView(APIView):
                                  "prompt": f"{created_keypoint.prompt}"}, status=status.HTTP_200_OK)
         return Response({"Access Denied": "You Are not Allowed to create summary"},
                             status=status.HTTP_401_UNAUTHORIZED)
-'''
