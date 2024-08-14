@@ -1,3 +1,7 @@
+from batch.models import *
+from departments.models import *
+from semesters.models import *
+from subjects.models import *
 from rest_framework import serializers
 from accounts.models import CustomUser, CustomDepartmentStudent, CustomDepartmentTeacher
 import datetime
@@ -59,6 +63,7 @@ class StudentsListSerializer(serializers.ModelSerializer):
                   'created_at']
 
     def get_batch(self, obj):
+        print(Batch.objects.get(student__id=obj.id))
         batch = Batch.objects.get(student__id=obj.id)
         return batch.name
 
