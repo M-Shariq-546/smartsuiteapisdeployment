@@ -46,6 +46,54 @@ class CustomUserSerializer(serializers.ModelSerializer):
             return age
         return None
 
+
+
+class StudentsListSerializer(serializers.ModelSerializer):
+    age = serializers.SerializerMethodField(read_only=True)
+    batch = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CustomDepartmentStudent
+        fields = ['id', 'first_name', 'last_name', 'father_name', 'cnic', 'address', 'date_of_birth', 'age', 'email',
+                  'phone', 'role', 'college_roll_number', 'university_roll_number', 'batch', 'password',
+                  'created_at']
+
+    def get_batch(self, obj):
+        batch = Batch.objects.get(student__id=obj.id)
+        return batch.name
+
+    def get_age(self, obj):
+        if obj.date_of_birth:
+            today = datetime.datetime.today()
+            age = today.year - obj.date_of_birth.year - (
+                        (today.month, today.day) < (obj.date_of_birth.month, obj.date_of_birth.day))
+            return age
+        return None
+
+
+class TeachersListSerializer(serializers.ModelSerializer):
+    age = serializers.SerializerMethodField(read_only=True)
+    department = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CustomDepartmentTeacher
+        fields = ['id', 'first_name', 'last_name', 'father_name', 'cnic', 'address', 'date_of_birth', 'age', 'email',
+                  'phone', 'role', 'employee_code', 'department', 'password',
+                  'created_at']
+
+    def get_department(self, obj):
+        dept = Department.objects.get(teacher__id=obj.id)
+        return dept.name
+
+    def get_age(self, obj):
+        if obj.date_of_birth:
+            today = datetime.datetime.today()
+            age = today.year - obj.date_of_birth.year - (
+                    (today.month, today.day) < (obj.date_of_birth.month, obj.date_of_birth.day))
+            return age
+        return None
+
+
 class CustomStudentUserSerializer(serializers.ModelSerializer):
     age = serializers.SerializerMethodField(read_only=True)
     batch = serializers.CharField(allow_null=False, required=True, allow_blank=False)

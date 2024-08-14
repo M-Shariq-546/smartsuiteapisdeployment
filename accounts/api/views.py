@@ -118,12 +118,12 @@ class LoginApiView(APIView):
 
 
 class TeachersListApiView(ListAPIView):
-    serializer_class = CustomTeacherUserSerializer
+    serializer_class = TeachersListSerializer
     permission_classes = [IsSuperAdmin]
     queryset = CustomDepartmentTeacher.objects.all()
 
 class StudentsListApiView(ListAPIView):
-    serializer_class = CustomStudentUserSerializer
+    serializer_class = StudentsListSerializer
     permission_classes = [IsSuperAdmin]
     queryset = CustomDepartmentStudent.objects.all()
 
