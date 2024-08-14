@@ -95,8 +95,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'defaultdb',
         'USER': 'doadmin',
-        'PASSWORD': 'AVNS_WBMn1ppu4nuMAe2KY3y',
-        'HOST': 'smartsuite-do-user-17418568-0.h.db.ondigitalocean.com',
+        'PASSWORD': 'AVNS_OVfo2tmhzpb8NaJRxUP',
+        'HOST': 'db-postgresql-nyc3-21995-do-user-17418568-0.m.db.ondigitalocean.com',
         'PORT': '25060',
         'OPTIONS': {
             'sslmode': 'require',
