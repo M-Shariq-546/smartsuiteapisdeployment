@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from accounts.models import CustomUser, CustomDepartmentStudent, CustomDepartmentTeacher
-# from datetime import datetime
 import datetime
 from .utils import *
 from threading import Thread
@@ -207,4 +206,3 @@ class CustomTeacherUserSerializer(serializers.ModelSerializer):
                         (today.month, today.day) < (obj.date_of_birth.month, obj.date_of_birth.day))
             return age
         return None
-

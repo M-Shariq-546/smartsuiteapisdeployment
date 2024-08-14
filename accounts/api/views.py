@@ -11,7 +11,11 @@ from django.contrib.auth import authenticate
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import get_object_or_404
-from batch.models import Batch
+from batch.models import *
+from departments.models import *
+from subjects.models import *
+from courses.models import *
+from semesters.models import *
 from .utils import *
 from history.models import History
 from django.core.mail import send_mail
@@ -289,3 +293,112 @@ class StudentCountView(APIView):
         }
 
         return Response(response_data, status=status.HTTP_200_OK)
+
+
+class TeacherGetDataApiView(APIView):
+    permission_classes = []
+    def get(self, request):
+        try:
+            teacher_id = self.request.query_params.get('teacher')
+
+            department = Department.objects.get(teacher=teacher_id)
+
+            courses = [{"id":course.id, "course_name":course.name} for course in Course.objects.filter(department__id=department.id)]
+
+            subjects = [{"id":subject.id, "subject_name":subject.name, 'lab':subject.is_lab} for subject in Subjects.objects.filter(teacher__id=teacher_id)]
+
+            no_of_courses = len(courses)
+            no_of_subjects_asssigned = len(subjects)
+            no_of_quizes = []
+
+            for subject in subjects:
+                quiz_count = DocumentQuiz.objects.filter(document__subject__id=subject['id']).count()
+                quiz_data = {
+                        'subject_id':subject['id'],
+                        'subject_name':subject['subject_name'],
+                        'quiz_count':quiz_count
+                }
+                no_of_quizes.append(quiz_data)
+
+            response = {
+                'id':teacher_id,
+                'department_id':department.id,
+                'department_name':department.name,
+                'courses':courses,
+                'subjects_assigned':subjects,
+                'courses_count':no_of_courses,
+                'subjects_assigned_count':no_of_subjects_asssigned,
+                'no_of_quizes_of_single_subject':no_of_quizes
+            }
+
+            return Response(response, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(f"Error of {e}", status=status.HTTP_400_BAD_REQUEST)
+
+
+class StudentGetDataApiView(APIView):
+    permission_classes = []
+
+    def get(self, request):
+        student = self.request.query_params.get('student')
+
+        batch = Batch.objects.get(student=student)
+
+        semesters = [{"semester_name":semester.name, "is_active":semester.is_active} for semester in Semester.objects.filter(batch=batch.id)]
+
+        active_semester = Semester.objects.get(batch=batch, is_active=True)
+
+        subjects = [subject.name for subject in Subjects.objects.filter(semester__id=active_semester.id)]
+
+        no_of_quizes_per_subeject = []
+
+        for subject in subjects:
+            quizes = [quiz for quiz in DocumentQuiz.objects.filter(document__subject__name=subject, upload=True)]
+
+            no_of_quiz = len(quizes)
+
+            results = []
+            for quiz in quizes:
+                try:
+                    quiz_result = QuizResult.objects.get(quiz=quiz)
+                    results.append({
+                    'quiz_id': quiz_result.quiz.id,
+                    'quiz_name': quiz_result.quiz.name,
+                    'status': quiz_result.status,
+                    'obtained_marks':quiz_result.obtained,
+                    'total_marks':quiz_result.total,
+                    'percentage':f"{quiz_result.score}%",
+                    })
+                except:
+                    results.append({
+                        'quiz_id': quiz.id,
+                        'quiz_name': quiz.name,
+                        'status': "Not Attempted",
+                    })
+            
+            quiz_data = {
+                'subject_name':subject,
+                "quizes_count":no_of_quiz,
+                'quizes_results':results
+            }
+
+            no_of_quizes_per_subeject.append(quiz_data)
+
+        response = {
+            'id':student,
+            'batch_id':str(batch.id),
+            'batch_name':str(batch.name),
+            'course_id':str(batch.course.id),
+            'course_name':str(batch.course.name),
+            'current_semester':str(active_semester.name),
+            'subjects':str(subjects),
+            'quizes_details':no_of_quizes_per_subeject
+        }
+
+        return Response(response , status=status.HTTP_200_OK)
+
+
+
+
+
+

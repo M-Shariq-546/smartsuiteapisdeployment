@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import Subjects, PDFFiles
+from ..models import *
 
 class PDFSerializers(serializers.ModelSerializer):
     class Meta:
@@ -55,3 +55,53 @@ class SubjectSerializer(serializers.ModelSerializer):
         new_subject = Subjects.objects.create(**validated_data)
 
         return new_subject
+
+    def update(self, instance , validated_data):
+        name = validated_data.pop('name', None)
+        teacher = validated_data.pop('teacher', None)
+
+        if teacher and name:
+            instance.teacher = teacher
+            instance.name = name
+            instance.save()
+        elif teacher is not None:
+            instance.teacher = teacher
+            instance.save()
+        elif name is not None:
+            instance.name = name
+            instance.save()
+        else:
+            raise serializers.ValidationError("Teacher id or name is required")
+
+        return instance
+
+class CreateQuizesSerializer(serializers.Serializer):
+    class Meta:
+        model = PDFFiles
+        fields = ['file']
+
+
+class QuizQuestionsSerializer(serializers.ModelSerializer):
+    options = serializers.SerializerMethodField()
+    quiz = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = QuizQuestions
+        fields = ['quiz', 'id', 'question', 'options', 'answer', 'created_at', 'updated_at', 'added_by']
+
+    def get_quiz(self, obj):
+        return obj.quiz.id
+
+    def get_options(self, obj):
+        return [{"A": obj.option_1, "B": obj.option_2, "C": obj.option_3, "D": obj.option_4}]
+
+
+class QuizQuestionsListSerializer(serializers.ModelSerializer):
+    options = serializers.SerializerMethodField()
+
+    class Meta:
+        model = QuizQuestions
+        fields = ['quiz', 'id', 'question', 'options', 'answer']
+
+    def get_options(self, obj):
+        return [{"A": obj.option_1, "B": obj.option_2, "C": obj.option_3, "D": obj.option_4}]

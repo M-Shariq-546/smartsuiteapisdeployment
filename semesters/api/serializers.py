@@ -7,7 +7,8 @@ class SemesterSerializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_kwargs = {
             'added_by':{'required':False},
-            'name': {'required': False}
+            'name': {'required': False},
+            'is_active': {'required': False}
         }
 
     def create(self, validated_data):
@@ -35,3 +36,9 @@ class SemesterSerializer(serializers.ModelSerializer):
         }
 
         return response
+
+    def update(self, instance, validated_data):
+        is_active = validated_data.pop('is_active')
+        instance.is_active = is_active
+        instance.save()
+        return instance

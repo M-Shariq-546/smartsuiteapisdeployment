@@ -8,6 +8,8 @@ from rest_framework import status
 from history.models import History
 from accounts.models import CustomUser
 from rest_framework.permissions import IsAuthenticated
+
+
 class DepartmentModelViewSet(ModelViewSet):
     serializer_class = DepartmentSerializers
     permission_classes = [IsAuthenticated]
@@ -22,8 +24,7 @@ class DepartmentModelViewSet(ModelViewSet):
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
-
-    def log_history(self, request , action , instance, changes=None):
+    def log_history(self, request, action, instance, changes=None):
         field_mapping = {
             'teachers': 'teacher',  # Example mapping, add more if necessary
         }
@@ -40,9 +41,9 @@ class DepartmentModelViewSet(ModelViewSet):
 
         History.objects.create(
             user=request.user,
-            action = action,
-            model_name = instance.__class__.__name__,
-            instance_id = instance.id,
+            action=action,
+            model_name=instance.__class__.__name__,
+            instance_id=instance.id,
             changes=changes,
         )
 
@@ -50,44 +51,44 @@ class DepartmentModelViewSet(ModelViewSet):
         teacher_id = self.request.query_params.get('teacher')
         if teacher_id:
             return Department.objects.filter(teacher__id=teacher_id, is_active=True)
-        return super().get_queryset()    
-    
+        return super().get_queryset()
+
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         response_data, instance = serializer.save()
-        # self.log_history(request, 'CREATE', instance, "Department created")
-        return Response(response_data, status=status.HTTP_200_OK)
-    
-    
-    def put(self , request , *args , **kwargs):
+        self.log_history(request, 'CREATE', instance, "Department created")
+        return Response({"message":"Department Created Successfully"}, status=status.HTTP_200_OK)
+
+    def put(self, request, *args, **kwargs):
         kwargs['partial'] = False
-        return self.update(request , *args , **kwargs)
-    
-    def patch(self , request , *args , **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
         kwargs['partial'] = True
-        return self.update(request , *args , **kwargs)
-    
+        return self.update(request, *args, **kwargs)
+
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         partial = kwargs.pop('partial', False)
-        serializer = self.get_serializer(instance, data=request.data , partial=partial)
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         response_data, instance = serializer.save()
-        # self.log_history(request, 'UPDATE', instance, request.data)
-        return Response(response_data, status=status.HTTP_200_OK)
-    
+        self.log_history(request, 'UPDATE', instance, request.data)
+        return Response({"message":"Department Updated Successfully"}, status=status.HTTP_200_OK)
+
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         response = self.get_serializer(instance)
-        return Response(response.data , status=status.HTTP_200_OK)
-            
-    def destroy(self , request , *args , **kwargs):
+        return Response(response.data, status=status.HTTP_200_OK)
+
+    def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer()
         serializer.delete(instance)
         # self.log_history(request, 'DELETE', instance)
-        return Response({"Success Message":f"Department with id {instance.id} has been deleted successfully"} , status=status.HTTP_200_OK)
+        return Response({"Success Message": f"Department with id {instance.id} has been deleted successfully"},
+                        status=status.HTTP_200_OK)
 
 
 class TeacherofDepartmentApiView(APIView):
@@ -103,7 +104,6 @@ class TeacherofDepartmentApiView(APIView):
         else:
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
-
 
     def get(self, request, *args, **kwargs):
         department_id = request.query_params.get('department')

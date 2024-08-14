@@ -9,3 +9,5 @@ admin.site.register(DocumentSummary)
 admin.site.register(DocumentKeypoint)
 admin.site.register(DocumentQuiz)
 admin.site.register(PDFFiles, PDFilesAdmin)
+admin.site.register(QuizResult)
+

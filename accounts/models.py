@@ -51,6 +51,8 @@ class CustomDepartmentTeacher(CustomUser):
     def save(self, *args, **kwargs):
         self.role = 'Teacher'
         super().save(*args, **kwargs)
+
+
 # CustomCompanyTeamUser
 class CustomDepartmentStudent(CustomUser):
     college_roll_number = models.CharField(max_length=100, unique=True)
@@ -87,6 +89,7 @@ class MyAdminSite(AdminSite):
             "Summaries":12,
             "Keypoints":13,
             "Quizes":14,
+            "QuizResults":15,
         }
 
         app_dict = self._build_app_dict(request, app_label)

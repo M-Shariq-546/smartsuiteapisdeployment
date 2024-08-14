@@ -1,3 +1,5 @@
+from django.shortcuts import get_object_or_404
+from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from .serializers import *
 from ..models import Semester
@@ -25,3 +27,22 @@ class SemestersModelViewSets(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         response = serializer.save()
         return Response(response, status=status.HTTP_201_CREATED)
+
+    def patch(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        kwargs['partial'] = False
+        return self.update(request, *args, **kwargs)
+
+class SemesterUpdateApiView(APIView):
+    serializer_class = SemesterSerializer
+    permission_classes = [IsSuperAdmin]
+    def patch(self, request, id):
+        instance = get_object_or_404(Semester, pk=id)
+        serializer = self.serializer_class(instance , data=request.data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response({"message":"Semester Updated Successfully"}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, statu=status.HTTP_400_BAD_REQUEST)

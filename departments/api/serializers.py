@@ -40,13 +40,14 @@ class TeachersofDepartment(serializers.ModelSerializer):
 
 class DepartmentSerializers(serializers.ModelSerializer):
     teachers = serializers.ListField(
-        child=serializers.UUIDField(), write_only=True, required=True
+        child=serializers.UUIDField(), write_only=True, required=False
     )
 
     class Meta:
         model = Department
         fields = ['id' , 'name' , 'teachers']
         extra_kwargs = {
+            'teachers':{'required':False},
             'added_by':{'required':False},
         }    
 

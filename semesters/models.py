@@ -11,6 +11,10 @@ class Semester(models.Model):
     batch = models.ForeignKey(Batch, on_delete=models.CASCADE)
     created_at = models.DateField(auto_now_add=True)
     added_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = "Semester"

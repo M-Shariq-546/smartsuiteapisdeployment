@@ -9,7 +9,15 @@ router.register(r'files', SubjectFilesModelViewSet, basename='subject_files')
 
 urlpatterns = [
     path('',include(router.urls)),
-    # path('summary/', CreateSummaryApiView.as_view(), name='summary'),
-    # path('keypoints/', CreateKeypointApiView.as_view(), name='keypoints'),
+    path('subject/<str:id>/', AssignTeacherToSubject.as_view(), name='assign_teacher_to_subject'),
+    path('summary/', CreateSummaryApiView.as_view(), name='summary'),
+    path('keypoints/', CreateKeypointApiView.as_view(), name='keypoints'),
+    path('quiz/upload/', UploadQuiz.as_view(), name="uploadQuiz"),
+    path('question/<uuid:question_id>/', EditQuizes.as_view(), name="EditQuestion"),
+    path('quiz/', CreateQuizessApiView.as_view(), name='create-quiz'),
+    path('quiz/submit/', SubmitQuizView.as_view(), name='submit_quiz'),
+
+    path('questions/', QuestionsofQuiz.as_view(), name='questions-of-quiz'),
+    path("quiz/<str:quiz_id>/", CreateQuizessApiView.as_view(), name='delete_quiz'),
 ]
 
