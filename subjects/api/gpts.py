@@ -5,7 +5,7 @@ import openai
 import os
 import chardet
 import pdfplumber    #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
-openai_api_key = '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'  # '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'
+openai_api_key = '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'  # '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'
 os.environ[
     'OPENAI_API_KEY'] = 'sk-proj-9FtVgsRK5a0YMObo5yMhT3BlbkFJYxPy0J1KInGdltTTYtQM'  # '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'
 
