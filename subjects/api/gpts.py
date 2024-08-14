@@ -76,8 +76,7 @@ def read_doc_file_content(file):
     try:
         doc = docx.Document(file)
         doc_content = [para.text for para in doc.paragraphs]
-        content = "\n".join(doc_content)
-        return content.replace('\x00', '')  # Remove null bytes
+        return "\n".join(doc_content)
     except Exception as e:
         logger.error(f"Error reading DOC/DOCX file: {e}")
         return None
@@ -88,16 +87,17 @@ def read_pdf_content(file):
         pdf_content = []
         with pdfplumber.open(file) as pdf:
             for i, page in enumerate(pdf.pages):
+                # print(i)
                 if i >= max_pages:
                     break
                 text = page.extract_text()
                 if text:
                     pdf_content.append(text)
-        content = "\n".join(pdf_content)
-        return content.replace('\x00', '')  # Remove null bytes
+        return "\n".join(pdf_content)
     except Exception as e:
         logger.error(f"Error reading PDF file: {e}")
         return None
+
 
 def read_text_file_content(file):
     encodings = ['utf-8', 'latin-1']
@@ -107,11 +107,12 @@ def read_text_file_content(file):
         try:
             file.seek(0)  # Reset file pointer to the beginning
             content = file.read().decode(encoding)
+            
             logger.info(f"Successfully decoded with encoding: {encoding}")
             break
         except UnicodeDecodeError:
             logger.warning(f"Failed to decode with encoding: {encoding}")
-            continue
+            continue  # Try next encoding if decoding fails
 
     if content is None:
         file.seek(0)
@@ -125,6 +126,5 @@ def read_text_file_content(file):
 
     if content is None:
         logger.error("Unable to decode file content with any encoding")
-        return None
 
-    return content.replace('\x00', '')
+    return content
