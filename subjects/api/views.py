@@ -118,8 +118,12 @@ class SubjectFilesModelViewSet(ModelViewSet):
         self.log_history(request, 'DELETE', instance)
         return Response({"Deleted":f"This File {instance_id} has been deleted successfully"}, status=status.HTTP_200_OK)
 
+<<<<<<< HEAD
 
 
+=======
+'''
+>>>>>>> 8ed81997e8282af5b563c955367b7156e61427f9
 # Summary Keypoints and Quizes Sections is going from below
 
 class CreateSummaryApiView(APIView):
@@ -249,6 +253,7 @@ class CreateKeypointApiView(APIView):
                                  "prompt": f"{created_keypoint.prompt}"}, status=status.HTTP_200_OK)
         return Response({"Access Denied": "You Are not Allowed to create summary"},
                             status=status.HTTP_401_UNAUTHORIZED)
+<<<<<<< HEAD
 
 
 class CreateQuizessApiView(APIView):
@@ -595,3 +600,6 @@ class SubmitQuizView(APIView):
             return Response({"message":"Successfully submitted","Score": score, "Status": status_test}, status=status.HTTP_200_OK)
         else:
             return Response({"Access Denied": "Unauthorized Access Requested"}, status=status.HTTP_401_UNAUTHORIZED)
+=======
+'''
+>>>>>>> 8ed81997e8282af5b563c955367b7156e61427f9
