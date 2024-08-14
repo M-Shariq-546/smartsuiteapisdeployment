@@ -342,7 +342,7 @@ class StudentGetDataApiView(APIView):
     def get(self, request):
         student = self.request.query_params.get('student')
 
-        batch = Batch.objects.get(student=student)
+        batch = Batch.objects.get(student__id=student)
 
         semesters = [{"semester_name":semester.name, "is_active":semester.is_active} for semester in Semester.objects.filter(batch=batch.id)]
 
