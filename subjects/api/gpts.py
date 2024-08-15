@@ -86,7 +86,6 @@ def read_pdf_content(file):
         pdf_content = []
         with pdfplumber.open(file) as pdf:
             for i, page in enumerate(pdf.pages):
-                # print(i)
                 if i >= max_pages:
                     break
                 text = page.extract_text()
@@ -97,7 +96,6 @@ def read_pdf_content(file):
         logger.error(f"Error reading PDF file: {e}")
         return None
 
-
 def read_text_file_content(file):
     encodings = ['utf-8', 'latin-1']
     content = None
@@ -105,8 +103,7 @@ def read_text_file_content(file):
     for encoding in encodings:
         try:
             file.seek(0)  # Reset file pointer to the beginning
-            content = file.read().decode(encoding)
-            
+            content = file.read().decode(encoding, errors='replace')
             logger.info(f"Successfully decoded with encoding: {encoding}")
             break
         except UnicodeDecodeError:
@@ -117,13 +114,19 @@ def read_text_file_content(file):
         file.seek(0)
         raw_data = file.read()
         detected_encoding = chardet.detect(raw_data)['encoding']
-        try:
-            content = raw_data.decode(detected_encoding)
-            logger.info(f"Successfully decoded with detected encoding: {detected_encoding}")
-        except Exception as e:
-            logger.error(f"Failed to decode with detected encoding: {detected_encoding}, Error: {e}")
+        if detected_encoding:
+            try:
+                content = raw_data.decode(detected_encoding, errors='replace')
+                logger.info(f"Successfully decoded with detected encoding: {detected_encoding}")
+            except Exception as e:
+                logger.error(f"Failed to decode with detected encoding: {detected_encoding}, Error: {e}")
+        else:
+            logger.error("chardet failed to detect encoding")
 
     if content is None:
         logger.error("Unable to decode file content with any encoding")
+
+    # Remove any null characters that may cause issues
+    content = content.replace('\x00', '')
 
     return content
