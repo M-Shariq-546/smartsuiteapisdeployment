@@ -118,6 +118,7 @@ class SubjectFilesModelViewSet(ModelViewSet):
         self.log_history(request, 'DELETE', instance)
         return Response({"Deleted":f"This File {instance_id} has been deleted successfully"}, status=status.HTTP_200_OK)
 
+
 # Summary Keypoints and Quizes Sections is going from below
 
 class CreateSummaryApiView(APIView):
@@ -593,7 +594,3 @@ class SubmitQuizView(APIView):
             return Response({"message":"Successfully submitted","Score": score, "Status": status_test}, status=status.HTTP_200_OK)
         else:
             return Response({"Access Denied": "Unauthorized Access Requested"}, status=status.HTTP_401_UNAUTHORIZED)
-
-
-
-# this file is updated
