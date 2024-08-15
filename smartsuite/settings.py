@@ -90,14 +90,16 @@ WSGI_APPLICATION = 'smartsuite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+import os
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'defaultdb',
-        'USER': 'doadmin',
-        'PASSWORD': 'AVNS_OVfo2tmhzpb8NaJRxUP',
-        'HOST': 'db-postgresql-nyc3-21995-do-user-17418568-0.m.db.ondigitalocean.com',
-        'PORT': '25060',
+        'NAME': os.getenv('DB_NAME', 'defaultdb'),  # Use 'defaultdb' as fallback
+        'USER': os.getenv('DB_USER', 'doadmin'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT', '25060'),  # Default port 25060
         'OPTIONS': {
             'sslmode': 'require',
         },
