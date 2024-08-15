@@ -74,10 +74,9 @@ def read_file_content(file):
 def read_doc_file_content(file):
     try:
         doc = docx.Document(file)
-        print(doc)
         doc_content = [para.text for para in doc.paragraphs]
-        print(doc_content)
-        return "\n".join(doc_content)
+        content = "\n".join(doc_content)
+        return content.replace('\x00', '')  # Remove null bytes
     except Exception as e:
         logger.error(f"Error reading DOC/DOCX file: {e}")
         return None
@@ -91,10 +90,10 @@ def read_pdf_content(file):
                 if i >= max_pages:
                     break
                 text = page.extract_text()
-                print(text)
                 if text:
                     pdf_content.append(text)
-        return "\n".join(pdf_content)
+        content = "\n".join(pdf_content)
+        return content.replace('\x00', '')  # Remove null bytes
     except Exception as e:
         logger.error(f"Error reading PDF file: {e}")
         return None
@@ -106,34 +105,25 @@ def read_text_file_content(file):
     for encoding in encodings:
         try:
             file.seek(0)  # Reset file pointer to the beginning
-            content = file.read().decode(encoding, errors='replace')
-            print(content)
+            content = file.read().decode(encoding)
             logger.info(f"Successfully decoded with encoding: {encoding}")
             break
         except UnicodeDecodeError:
             logger.warning(f"Failed to decode with encoding: {encoding}")
-            continue  # Try next encoding if decoding fails
+            continue
 
     if content is None:
         file.seek(0)
         raw_data = file.read()
-        print(raw_data)
         detected_encoding = chardet.detect(raw_data)['encoding']
-        print(detected_encoding)
-        if detected_encoding:
-            try:
-                content = raw_data.decode(detected_encoding, errors='replace')
-                print(content)
-                logger.info(f"Successfully decoded with detected encoding: {detected_encoding}")
-            except Exception as e:
-                logger.error(f"Failed to decode with detected encoding: {detected_encoding}, Error: {e}")
-        else:
-            logger.error("chardet failed to detect encoding")
+        try:
+            content = raw_data.decode(detected_encoding)
+            logger.info(f"Successfully decoded with detected encoding: {detected_encoding}")
+        except Exception as e:
+            logger.error(f"Failed to decode with detected encoding: {detected_encoding}, Error: {e}")
 
     if content is None:
         logger.error("Unable to decode file content with any encoding")
+        return None
 
-    # Remove any null characters that may cause issues
-    content = content.replace('\x00', '')
-    print(content)
-    return content
+    return content.replace('\x00', '')
