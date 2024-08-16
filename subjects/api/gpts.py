@@ -58,19 +58,28 @@ def generate_quizes_from_gpt(content):
     quiz = response.choices[0].message['content'].strip()
     return quiz, prompt
 
+import os
 
 def read_file_content(file):
-    print(file)
+    # Check if 'file' is a string (i.e., a file path) and open it
+    if isinstance(file, str):
+        if os.path.exists(file):
+            with open(file, 'rb') as f:
+                return process_file(f)
+        else:
+            logger.error("File does not exist.")
+            return None
+    else:
+        return process_file(file)
+
+def process_file(file):
+    # Now 'file' is an open file object, so you can safely access 'file.name'
     file_type = file.name.split('.')[-1].lower()
-    print(file_type)
     if file_type == 'pdf':
-        print("pdf call")
         return read_pdf_content(file)
     elif file_type == 'txt':
-        print("txt call")
         return read_text_file_content(file)
     elif file_type in ['doc', 'docx']:
-        print("docx related")
         return read_doc_file_content(file)
     else:
         logger.error("Unsupported file type.")
@@ -78,13 +87,9 @@ def read_file_content(file):
 
 def read_doc_file_content(file):
     try:
-        print(file)
         doc = docx.Document(file)
-        print(doc)
         doc_content = [para.text for para in doc.paragraphs]
-        print(doc_content)
         content = "\n".join(doc_content)
-        print(content)
         return content.replace('\x00', '')  # Remove null bytes
     except Exception as e:
         logger.error(f"Error reading DOC/DOCX file: {e}")
@@ -92,50 +97,109 @@ def read_doc_file_content(file):
 
 def read_pdf_content(file):
     try:
-        print(file)
         max_pages = 100
         pdf_content = []
         with pdfplumber.open(file) as pdf:
             for i, page in enumerate(pdf.pages):
-                if i >= 5:
+                if i >= max_pages:
                     break
                 text = page.extract_text()
                 if text:
                     pdf_content.append(text)
-        print(pdf_content)
         content = "\n".join(pdf_content)
-        print(content)
         return content.replace('\x00', '')  # Remove null bytes
     except Exception as e:
         logger.error(f"Error reading PDF file: {e}")
         return None
 
 def read_text_file_content(file):
-    encodings = ['utf-8', 'latin-1']
-    content = None
-
-    for encoding in encodings:
-        try:
-            file.seek(0)  # Reset file pointer to the beginning
-            content = file.read().decode(encoding)
-            logger.info(f"Successfully decoded with encoding: {encoding}")
-            break
-        except UnicodeDecodeError:
-            logger.warning(f"Failed to decode with encoding: {encoding}")
-            continue
-
-    if content is None:
-        file.seek(0)
-        raw_data = file.read()
-        detected_encoding = chardet.detect(raw_data)['encoding']
-        try:
-            content = raw_data.decode(detected_encoding)
-            logger.info(f"Successfully decoded with detected encoding: {detected_encoding}")
-        except Exception as e:
-            logger.error(f"Failed to decode with detected encoding: {detected_encoding}, Error: {e}")
-
-    if content is None:
-        logger.error("Unable to decode file content with any encoding")
+    try:
+        content = file.read().decode('utf-8')
+        return content.replace('\x00', '')  # Remove null bytes
+    except Exception as e:
+        logger.error(f"Error reading text file: {e}")
         return None
 
-    return content.replace('\x00', '')
+
+#=================================================old logic ============================================
+    
+# def read_file_content(file):
+#     print(file)
+#     file_type = file.name.split('.')[-1].lower()
+#     print(file_type)
+#     if file_type == 'pdf':
+#         print("pdf call")
+#         return read_pdf_content(file)
+#     elif file_type == 'txt':
+#         print("txt call")
+#         return read_text_file_content(file)
+#     elif file_type in ['doc', 'docx']:
+#         print("docx related")
+#         return read_doc_file_content(file)
+#     else:
+#         logger.error("Unsupported file type.")
+#         return None
+
+# def read_doc_file_content(file):
+#     try:
+#         print(file)
+#         doc = docx.Document(file)
+#         print(doc)
+#         doc_content = [para.text for para in doc.paragraphs]
+#         print(doc_content)
+#         content = "\n".join(doc_content)
+#         print(content)
+#         return content.replace('\x00', '')  # Remove null bytes
+#     except Exception as e:
+#         logger.error(f"Error reading DOC/DOCX file: {e}")
+#         return None
+
+# def read_pdf_content(file):
+#     try:
+#         print(file)
+#         max_pages = 100
+#         pdf_content = []
+#         with pdfplumber.open(file) as pdf:
+#             for i, page in enumerate(pdf.pages):
+#                 if i >= 5:
+#                     break
+#                 text = page.extract_text()
+#                 if text:
+#                     pdf_content.append(text)
+#         print(pdf_content)
+#         content = "\n".join(pdf_content)
+#         print(content)
+#         return content.replace('\x00', '')  # Remove null bytes
+#     except Exception as e:
+#         logger.error(f"Error reading PDF file: {e}")
+#         return None
+
+# def read_text_file_content(file):
+#     encodings = ['utf-8', 'latin-1']
+#     content = None
+
+#     for encoding in encodings:
+#         try:
+#             file.seek(0)  # Reset file pointer to the beginning
+#             content = file.read().decode(encoding)
+#             logger.info(f"Successfully decoded with encoding: {encoding}")
+#             break
+#         except UnicodeDecodeError:
+#             logger.warning(f"Failed to decode with encoding: {encoding}")
+#             continue
+
+#     if content is None:
+#         file.seek(0)
+#         raw_data = file.read()
+#         detected_encoding = chardet.detect(raw_data)['encoding']
+#         try:
+#             content = raw_data.decode(detected_encoding)
+#             logger.info(f"Successfully decoded with detected encoding: {detected_encoding}")
+#         except Exception as e:
+#             logger.error(f"Failed to decode with detected encoding: {detected_encoding}, Error: {e}")
+
+#     if content is None:
+#         logger.error("Unable to decode file content with any encoding")
+#         return None
+
+#     return content.replace('\x00', '')
