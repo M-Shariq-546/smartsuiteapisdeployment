@@ -159,8 +159,15 @@ class CreateSummaryApiView(APIView):
                 
             print(file)
             print(file.file)
-            content = read_file_content(file.file)
-
+            print(file.file.url)
+            print(file.file.path)
+            try:
+                content = read_file_content(file.file)
+            except:
+                content = read_file_content(file.file.url)
+            else:
+                content = read_file_content(file.file.path)
+                
             print(content)
             
             if content is None:
