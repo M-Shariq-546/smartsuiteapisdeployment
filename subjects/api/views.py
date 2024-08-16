@@ -150,13 +150,19 @@ class CreateSummaryApiView(APIView):
             if summary_count >= 3:
                 return Response({"Limit Exceeded":"Your Limits of Summary Generation for this Document has Exceeded"}, status=status.HTTP_510_NOT_EXTENDED)
 
+            print(document)
+            
             try:
-                file = PDFFiles.objects.get(id=document)
+                file = PDFFiles.objects.get(id=document, is_active=True)
             except:
                 return Response({"Not Found":"No Associated File Found"}, status=status.HTTP_404_NOT_FOUND)
-
+                
+            print(file)
+            print(file.file)
             content = read_file_content(file.file)
 
+            print(content)
+            
             if content is None:
                 return Response({"error": "Unable to decode file content"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -215,13 +221,20 @@ class CreateKeypointApiView(APIView):
             if keypoint_count >= 3:
                 return Response({"Limit Exceeded":"Your Limits of Keypoints Generation for this Document has Exceeded"}, status=status.HTTP_510_NOT_EXTENDED)
 
+            print(document)
+            
             try:
-                file = PDFFiles.objects.get(id=document)
+                file = PDFFiles.objects.get(id=document, is_active=True)
             except:
                 return Response({"Not Found":"No Associated File Found"}, status=status.HTTP_404_NOT_FOUND)
 
+            print(file)
+            print(file.file)
+        
             content = read_file_content(file.file)
 
+            print(content)
+            
             if content is None:
                 return Response({"error": "Unable to decode file content"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -351,6 +364,10 @@ class CreateQuizessApiView(APIView):
                     {"error": "Quiz creation limit reached. No more than 5 quizzes allowed for this document."},
                     status=status.HTTP_400_BAD_REQUEST)
 
+            
+            print(file)
+            print(file.file)
+            
             content = read_file_content(document.file)
 
             if content is None:
