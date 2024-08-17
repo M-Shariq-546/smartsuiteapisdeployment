@@ -60,23 +60,27 @@ def generate_quizes_from_gpt(content):
 
 
 #======================================================= Files reading and converting into text ===========================================
-
-def read_file_content(file):
-    print(file)
-    file_type = file.name.split('.')[-1].lower()
-    print(file_type)
-    if file_type == 'pdf':
-        print("pdf call")
-        return read_pdf_content(file)
-    elif file_type == 'txt':
-        print("txt call")
-        return read_text_file_content(file)
-    elif file_type in ['doc', 'docx']:
-        print("docx related")
-        return read_doc_file_content(file)
-    else:
-        logger.error("Unsupported file type.")
+def read_file_content(file_path):
+    try:
+        if default_storage.exists(file_path):
+            with default_storage.open(file_path) as file:
+                if file_path.endswith('.docx'):
+                    content = read_doc_file_content(file)
+                elif file_path.endswith('.pdf'):
+                    content = read_pdf_content(file)
+                elif file_path.endswith('.txt'):
+                    content = read_text_file_content(file)
+                else:
+                    logger.warning("Unsupported file type")
+                    content = None
+                return content
+        else:
+            logger.error("File does not exist.")
+            return None
+    except Exception as e:
+        logger.error(f"Error processing file: {e}")
         return None
+
 
 def read_doc_file_content(file):
     try:
