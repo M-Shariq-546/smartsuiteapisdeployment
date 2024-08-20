@@ -60,37 +60,24 @@ def generate_quizes_from_gpt(content):
 
 
 #======================================================= Files reading and converting into text ===========================================
-def read_file_content(file_path):
-    try:
-        if default_storage.exists(file_path):
-            with default_storage.open(file_path) as file:
-                if file_path.endswith('.docx'):
-                    content = read_doc_file_content(file)
-                elif file_path.endswith('.pdf'):
-                    content = read_pdf_content(file)
-                elif file_path.endswith('.txt'):
-                    content = read_text_file_content(file)
-                else:
-                    logger.warning("Unsupported file type")
-                    content = None
-                return content
-        else:
-            logger.error("File does not exist.")
-            return None
-    except Exception as e:
-        logger.error(f"Error processing file: {e}")
-        return None
 
+def read_file_content(file):
+    file_type = file.name.split('.')[-1].lower()
+    if file_type == 'pdf':
+        return read_pdf_content(file)
+    elif file_type == 'txt':
+        return read_text_file_content(file)
+    elif file_type in ['doc', 'docx']:
+        return read_doc_file_content(file)
+    else:
+        logger.error("Unsupported file type.")
+        return None
 
 def read_doc_file_content(file):
     try:
-        print(file)
         doc = docx.Document(file)
-        print(doc)
         doc_content = [para.text for para in doc.paragraphs]
-        print(doc_content)
         content = "\n".join(doc_content)
-        print(content)
         return content.replace('\x00', '')  # Remove null bytes
     except Exception as e:
         logger.error(f"Error reading DOC/DOCX file: {e}")
@@ -98,19 +85,16 @@ def read_doc_file_content(file):
 
 def read_pdf_content(file):
     try:
-        print(file)
         max_pages = 100
         pdf_content = []
         with pdfplumber.open(file) as pdf:
             for i, page in enumerate(pdf.pages):
-                if i >= 5:
+                if i >= max_pages:
                     break
                 text = page.extract_text()
                 if text:
                     pdf_content.append(text)
-        print(pdf_content)
         content = "\n".join(pdf_content)
-        print(content)
         return content.replace('\x00', '')  # Remove null bytes
     except Exception as e:
         logger.error(f"Error reading PDF file: {e}")
