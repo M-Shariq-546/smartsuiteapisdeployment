@@ -58,9 +58,69 @@ def generate_quizes_from_gpt(content):
     quiz = response.choices[0].message['content'].strip()
     return quiz, prompt
 
+import os
 
+def read_file_content(file):
+    # Check if 'file' is a string (i.e., a file path) and open it
+    if isinstance(file, str):
+        if os.path.exists(file):
+            with open(file, 'rb') as f:
+                return process_file(f)
+        else:
+            logger.error("File does not exist.")
+            return None
+    else:
+        return process_file(file)
+
+def process_file(file):
+    # Now 'file' is an open file object, so you can safely access 'file.name'
+    file_type = file.name.split('.')[-1].lower()
+    if file_type == 'pdf':
+        return read_pdf_content(file)
+    elif file_type == 'txt':
+        return read_text_file_content(file)
+    elif file_type in ['doc', 'docx']:
+        return read_doc_file_content(file)
+    else:
+        logger.error("Unsupported file type.")
+        return None
+
+def read_doc_file_content(file):
+    try:
+        doc = docx.Document(file)
+        doc_content = [para.text for para in doc.paragraphs]
+        content = "\n".join(doc_content)
+        return content.replace('\x00', '')  # Remove null bytes
+    except Exception as e:
+        logger.error(f"Error reading DOC/DOCX file: {e}")
+        return None
+
+def read_pdf_content(file):
+    try:
+        max_pages = 100
+        pdf_content = []
+        with pdfplumber.open(file) as pdf:
+            for i, page in enumerate(pdf.pages):
+                if i >= max_pages:
+                    break
+                text = page.extract_text()
+                if text:
+                    pdf_content.append(text)
+        content = "\n".join(pdf_content)
+        return content.replace('\x00', '')  # Remove null bytes
+    except Exception as e:
+        logger.error(f"Error reading PDF file: {e}")
+        return None
+
+def read_text_file_content(file):
+    try:
+        content = file.read().decode('utf-8')
+        return content.replace('\x00', '')  # Remove null bytes
+    except Exception as e:
+        logger.error(f"Error reading text file: {e}")
+        return None
 #======================================================= Files reading and converting into text ===========================================
-
+'''
 def read_file_content(file):
     file_type = file.name.split('.')[-1].lower()
     if file_type == 'pdf':
@@ -129,3 +189,4 @@ def read_text_file_content(file):
         return None
 
     return content.replace('\x00', '')
+'''
