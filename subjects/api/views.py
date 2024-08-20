@@ -124,6 +124,20 @@ class SubjectFilesModelViewSet(ModelViewSet):
 class CreateSummaryApiView(APIView):
     permission_classes = [IsTeacherforFile | IsStudentForFiles]
 
+    def get(self, request):
+        file = self.request.query_params.get('file')
+        
+        try:
+            summary = DocumentSummary.objects.filter(document__id=file).first()
+            return {
+                'id':summary.id,
+                'keypoints':summary.summary
+            }
+        except:
+            return None
+
+
+
     def log_history(self, request, action, instance, changes=None):
         History.objects.create(
             user = request.user,
@@ -202,6 +216,21 @@ class CreateSummaryApiView(APIView):
 class CreateKeypointApiView(APIView):
     permission_classes = [IsTeacherforFile | IsStudentForFiles]
 
+
+    def get(self, request):
+        file = self.request.query_params.get('file')
+        
+        try:
+            keypoint = DocumentKeypoint.objects.filter(document__id=file).first()
+            return {
+                'id':keypoint.id,
+                'keypoints':keypoint.keypoint
+            }
+        except:
+            return None
+
+
+
     def log_history(self, request, action, instance, changes=None):
         History.objects.create(
             user = request.user,
@@ -237,9 +266,15 @@ class CreateKeypointApiView(APIView):
 
             print(file)
             print(file.file)
-        
-            content = read_file_content(file.file)
-
+            print(file.file.url)
+            print(file.file.path)
+            try:
+                content = read_file_content(file.file)
+            except:
+                content = read_file_content(file.file.url)
+            else:
+                content = read_file_content(file.file.path)
+                
             print(content)
             
             if content is None:
@@ -350,7 +385,7 @@ class CreateQuizessApiView(APIView):
 
             try:
                 document = PDFFiles.objects.get(id=document_id, is_active=True)
-            except PDFiles.DoesNotExist:
+            except PDFFiles.DoesNotExist:
                 return Response({"error": "No Document Found"}, status=status.HTTP_404_NOT_FOUND)
 
             user = request.user
@@ -372,10 +407,18 @@ class CreateQuizessApiView(APIView):
                     status=status.HTTP_400_BAD_REQUEST)
 
             
-            print(file)
-            print(file.file)
-            
-            content = read_file_content(document.file)
+            print(document)
+            print(document.file)
+            print(document.file.url)
+            print(document.file.path)
+            try:
+                content = read_file_content(document.file)
+            except:
+                content = read_file_content(document.file.url)
+            else:
+                content = read_file_content(document.file.path)
+                
+            print(content)
 
             if content is None:
                 return Response({"error": "Unable to decode file content"},
