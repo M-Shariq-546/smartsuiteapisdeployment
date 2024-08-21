@@ -92,17 +92,25 @@ WSGI_APPLICATION = 'smartsuite.wsgi.application'
 
 import os
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv('DB_NAME', 'defaultdb'),  # Use 'defaultdb' as fallback
+#         'USER': os.getenv('DB_USER', 'doadmin'),
+#         'PASSWORD': os.getenv('DB_PASSWORD'),
+#         'HOST': os.getenv('DB_HOST'),
+#         'PORT': os.getenv('DB_PORT', '25060'),  # Default port 25060
+#         'OPTIONS': {
+#             'sslmode': 'require',
+#         },
+#     }
+# }
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME', 'defaultdb'),  # Use 'defaultdb' as fallback
-        'USER': os.getenv('DB_USER', 'doadmin'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT', '25060'),  # Default port 25060
-        'OPTIONS': {
-            'sslmode': 'require',
-        },
+        'ENGINE':'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3'
     }
 }
 
