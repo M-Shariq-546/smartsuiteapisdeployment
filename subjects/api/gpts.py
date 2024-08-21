@@ -5,8 +5,8 @@ import openai
 import os
 import chardet
 import pdfplumber    
-openai_api_key = os.getenv('API_KEY')
-
+# openai_api_key = os.getenv('API_KEY')
+openai_api_key  = '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'
 
 logging.basicConfig(filename='app.log', level=logging.INFO)
 logger = logging.getLogger(__name__)
