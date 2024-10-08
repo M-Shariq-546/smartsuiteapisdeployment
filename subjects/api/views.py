@@ -336,7 +336,6 @@ class CreateKeypointApiView(APIView):
             except:
                 return Response({"Not Found":"No Associated File Found"}, status=status.HTTP_404_NOT_FOUND)
 
-<<<<<<< HEAD
             print(file)
             print(file.file)
             print(file.file.url)
@@ -349,11 +348,7 @@ class CreateKeypointApiView(APIView):
                 content = read_file_content(file.file.path)
                 
             print(content)
-            
-=======
-            content = read_file_content(file.file)
 
->>>>>>> af72b9ed3bc689b17b146f3252c5bd975018b7ce
             if content is None:
                 return Response({"error": "Unable to decode file content"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -482,8 +477,6 @@ class CreateQuizessApiView(APIView):
                 return Response(
                     {"error": "Quiz creation limit reached. No more than 5 quizzes allowed for this document."},
                     status=status.HTTP_400_BAD_REQUEST)
-
-<<<<<<< HEAD
             
             print(document)
             print(document.file)
@@ -497,10 +490,6 @@ class CreateQuizessApiView(APIView):
                 content = read_file_content(document.file.path)
                 
             print(content)
-=======
-
-            content = read_file_content(document.file)
->>>>>>> af72b9ed3bc689b17b146f3252c5bd975018b7ce
 
             if content is None:
                 return Response({"error": "Unable to decode file content"},
