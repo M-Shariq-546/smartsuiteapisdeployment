@@ -28,21 +28,21 @@ jobs:
       run: |
         echo "🔄 Installing dependencies..."
         python -m pip install --upgrade pip
-        if [ -f smartsuite/requirements.txt ]; then 
-          pip install -r smartsuite/requirements.txt
+        if [ -f requirements.txt ]; then 
+          pip install -r requirements.txt
         fi
         echo "✅ Dependencies installed successfully."
 
     - name: Making migrations
       run: |
         echo "🔄 Making Migrations..."
-        python smartsuite/manage.py makemigrations
+        python manage.py makemigrations
         echo "✅ Migrations run successfully."
 
     - name: Running Migrate
       run: |
         echo "🔄 Running Migrate..."
-        python smartsuite/manage.py migrate
+        python manage.py migrate
         echo "✅ Migrate command executed successfully."
 
     - name: Deploy to PythonAnywhere
