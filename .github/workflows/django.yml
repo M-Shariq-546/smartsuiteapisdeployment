@@ -56,7 +56,7 @@ jobs:
         APP_DIR="/home/${{ secrets.PYTHONANYWHERE_USERNAME }}/smartsuiteapisdeployment"
 
 
-        
+        mkdir -p ~/.ssh
         ssh-keyscan -H ssh.pythonanywhere.com >> ~/.ssh/known_hosts
 
         
