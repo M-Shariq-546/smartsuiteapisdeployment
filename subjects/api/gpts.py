@@ -11,7 +11,7 @@ load_dotenv()  # This loads the .env file automatically
 openai_api_key = os.getenv('API_KEY')
 
 # openai_api_key = os.getenv('API_KEY')
-openai_api_key  = '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'
+openai_api_key  = os.getenv('API_KEY')
 
 logging.basicConfig(filename='app.log', level=logging.INFO)
 logger = logging.getLogger(__name__)
