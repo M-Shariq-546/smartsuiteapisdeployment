@@ -54,11 +54,17 @@ jobs:
 
         # Define your app directory on PythonAnywhere (this may vary)
         APP_DIR="/home/${{ secrets.PYTHONANYWHERE_USERNAME }}/smartsuiteapisdeployment"
+
+
+        
+        ssh-keyscan -H ssh.pythonanywhere.com >> ~/.ssh/known_hosts
+
         
         echo "📂 Transferring code to PythonAnywhere..."
         # Copy the code from GitHub to PythonAnywhere
         scp -r . ${{ secrets.PYTHONANYWHERE_USERNAME }}@ssh.pythonanywhere.com:$APP_DIR
 
+        
         echo "🔄 Reloading the web app on PythonAnywhere..."
         # Use the PythonAnywhere API to reload the web app
         curl -X POST "https://www.pythonanywhere.com/api/v0/user/${{ secrets.PYTHONANYWHERE_USERNAME }}/webapps/${{ secrets.PYTHONANYWHERE_USERNAME }}.pythonanywhere.com/reload/" \
