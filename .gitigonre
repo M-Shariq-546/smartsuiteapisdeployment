@@ -20,6 +20,6 @@ qodana.yaml
 requirements.txt
 vercel.json
 build_files.sh
-**/migrations/
-**/__pycache__/
+**/migrations/*
+**/__pycache__/*
 .env
