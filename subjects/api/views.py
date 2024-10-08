@@ -336,7 +336,6 @@ class CreateKeypointApiView(APIView):
             except:
                 return Response({"Not Found":"No Associated File Found"}, status=status.HTTP_404_NOT_FOUND)
 
-<<<<<<< HEAD
             print(file)
             print(file.file)
             print(file.file.url)
@@ -350,10 +349,6 @@ class CreateKeypointApiView(APIView):
                 
             print(content)
             
-=======
-            content = read_file_content(file.file)
-
->>>>>>> af72b9ed3bc689b17b146f3252c5bd975018b7ce
             if content is None:
                 return Response({"error": "Unable to decode file content"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
