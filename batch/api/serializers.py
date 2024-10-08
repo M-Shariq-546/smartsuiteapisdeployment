@@ -20,7 +20,8 @@ class BatchSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = Batch
-        fields = ['id', 'year' , 'course', 'students', 'added_by']
+        fields = ['id', 'name', 'year', 'end_year' , 'course', 'students', 'added_by']
+        read_only_fields = ['name']
         extra_kwargs = {
             "added_by":{
                 'required':False

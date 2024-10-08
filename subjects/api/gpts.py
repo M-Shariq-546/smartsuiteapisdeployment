@@ -4,9 +4,14 @@ import logging
 import openai
 import os
 import chardet
-import pdfplumber    
-openai_api_key = os.getenv('API_KEY')
+import pdfplumber
+from dotenv import load_dotenv
 
+load_dotenv()  # This loads the .env file automatically
+openai_api_key = os.environ.get('API_KEY')
+
+# openai_api_key = os.getenv('API_KEY')
+openai_api_key  = os.getenv('API_KEY')
 
 logging.basicConfig(filename='app.log', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -46,7 +51,7 @@ def generate_keypoints_from_gpt(content, prompt):
 # Quizes Generations from gpt
 def generate_quizes_from_gpt(content):
     openai.api_key = openai_api_key
-    prompt = f"You are the teacher, Provide me a random number of quizzes with a maximum limit of 10 questions, each containing 4 options as MCQs. Indicate the correct option by labeling it A, B, C, or D and answer as 'Correct Answer'. Ensure the quizzes are different each time and challenging:\n\n{content[:7500]}\nPlease ensure your response is concise with no extra text, and format questions as 'Question:', and options as 'A:', 'B:', etc and aswer as 'Correct Answer: 'Correct Option''. please strictly follow this pattern for quiz and no other pattern will be allowed for quiz. Only allowed pattern is of question is 'Question:' and nothing else is allowed and make sure no new line will be in between 'Question:' and question heading"
+    prompt = f"You are the teacher, Provide me quizzes with a maximum limit of 10 questions, each containing 4 options as MCQs. Indicate the correct option by labeling it A, B, C, or D and answer as 'Correct Answer'. Ensure the quizzes are different each time and challenging, apply all previous requirements on this content:\n\n{content[:7500]}\nPlease ensure your response is concise with no extra text, and format questions as 'Question:', and options as 'A:', 'B:', etc and aswer as 'Correct Answer: 'Correct Option''. please strictly follow this pattern for quiz and no other pattern will be allowed for quiz. Only allowed pattern is of question is 'Question:' and nothing else is allowed and make sure no new line will be in between 'Question:' and question heading"
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
@@ -58,19 +63,28 @@ def generate_quizes_from_gpt(content):
     quiz = response.choices[0].message['content'].strip()
     return quiz, prompt
 
+import os
 
 def read_file_content(file):
-    print(file)
+    # Check if 'file' is a string (i.e., a file path) and open it
+    if isinstance(file, str):
+        if os.path.exists(file):
+            with open(file, 'rb') as f:
+                return process_file(f)
+        else:
+            logger.error("File does not exist.")
+            return None
+    else:
+        return process_file(file)
+
+def process_file(file):
+    # Now 'file' is an open file object, so you can safely access 'file.name'
     file_type = file.name.split('.')[-1].lower()
-    print(file_type)
     if file_type == 'pdf':
-        print("pdf call")
         return read_pdf_content(file)
     elif file_type == 'txt':
-        print("txt call")
         return read_text_file_content(file)
     elif file_type in ['doc', 'docx']:
-        print("docx related")
         return read_doc_file_content(file)
     else:
         logger.error("Unsupported file type.")
@@ -78,13 +92,9 @@ def read_file_content(file):
 
 def read_doc_file_content(file):
     try:
-        print(file)
         doc = docx.Document(file)
-        print(doc)
         doc_content = [para.text for para in doc.paragraphs]
-        print(doc_content)
         content = "\n".join(doc_content)
-        print(content)
         return content.replace('\x00', '')  # Remove null bytes
     except Exception as e:
         logger.error(f"Error reading DOC/DOCX file: {e}")
@@ -92,19 +102,64 @@ def read_doc_file_content(file):
 
 def read_pdf_content(file):
     try:
-        print(file)
         max_pages = 100
         pdf_content = []
         with pdfplumber.open(file) as pdf:
             for i, page in enumerate(pdf.pages):
-                if i >= 5:
+                if i >= max_pages:
                     break
                 text = page.extract_text()
                 if text:
                     pdf_content.append(text)
-        print(pdf_content)
         content = "\n".join(pdf_content)
-        print(content)
+        return content.replace('\x00', '')  # Remove null bytes
+    except Exception as e:
+        logger.error(f"Error reading PDF file: {e}")
+        return None
+
+def read_text_file_content(file):
+    try:
+        content = file.read().decode('utf-8')
+        return content.replace('\x00', '')  # Remove null bytes
+    except Exception as e:
+        logger.error(f"Error reading text file: {e}")
+        return None
+#======================================================= Files reading and converting into text ===========================================
+'''
+def read_file_content(file):
+    file_type = file.name.split('.')[-1].lower()
+    if file_type == 'pdf':
+        return read_pdf_content(file)
+    elif file_type == 'txt':
+        return read_text_file_content(file)
+    elif file_type in ['doc', 'docx']:
+        return read_doc_file_content(file)
+    else:
+        logger.error("Unsupported file type.")
+        return None
+
+def read_doc_file_content(file):
+    try:
+        doc = docx.Document(file)
+        doc_content = [para.text for para in doc.paragraphs]
+        content = "\n".join(doc_content)
+        return content.replace('\x00', '')  # Remove null bytes
+    except Exception as e:
+        logger.error(f"Error reading DOC/DOCX file: {e}")
+        return None
+
+def read_pdf_content(file):
+    try:
+        max_pages = 100
+        pdf_content = []
+        with pdfplumber.open(file) as pdf:
+            for i, page in enumerate(pdf.pages):
+                if i >= max_pages:
+                    break
+                text = page.extract_text()
+                if text:
+                    pdf_content.append(text)
+        content = "\n".join(pdf_content)
         return content.replace('\x00', '')  # Remove null bytes
     except Exception as e:
         logger.error(f"Error reading PDF file: {e}")
@@ -139,3 +194,4 @@ def read_text_file_content(file):
         return None
 
     return content.replace('\x00', '')
+'''

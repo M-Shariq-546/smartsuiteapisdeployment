@@ -43,7 +43,7 @@ class PDFFiles(models.Model):
 class DocumentSummary(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
     summary = models.TextField()
-    prompt = models.CharField(blank=True, null=True)
+    prompt = models.CharField(max_length=500,blank=True, null=True)
     document = models.ForeignKey(PDFFiles, on_delete=models.CASCADE, related_name='document_for_summary')
     created_at = models.DateTimeField(auto_now_add=True)
     added_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='summary_adder')
@@ -59,7 +59,7 @@ class DocumentSummary(models.Model):
 class DocumentKeypoint(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
     keypoint = models.TextField()
-    prompt = models.CharField(blank=True, null=True)
+    prompt = models.CharField(max_length=500,blank=True, null=True)
     document = models.ForeignKey(PDFFiles, on_delete=models.CASCADE, related_name='keypoint')
     created_at = models.DateTimeField(auto_now_add=True)
     added_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='keypoints_adder')
@@ -76,7 +76,7 @@ class DocumentQuiz(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
     name = models.CharField(max_length=255)
     quiz = models.TextField(blank=True, null=True)
-    prompt = models.TextField(blank=True, null=True)
+    prompt = models.TextField(max_length=500,blank=True, null=True)
     document = models.ForeignKey(PDFFiles, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)

@@ -11,3 +11,5 @@ admin.site.register(DocumentQuiz)
 admin.site.register(PDFFiles, PDFilesAdmin)
 admin.site.register(QuizResult)
 
+admin.site.register(QuizQuestions)
+
