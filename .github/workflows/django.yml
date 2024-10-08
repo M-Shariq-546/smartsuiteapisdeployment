@@ -1,0 +1,67 @@
+name: Deploy to PythonAnywhere
+
+on:
+  push:
+    branches:
+      - main  # Trigger the workflow on push to the 'main' branch.
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Checkout checkpoint
+      run: echo "✅ Code checked out successfully."
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'  # Match this with your Python version
+
+    - name: Python setup checkpoint
+      run: echo "✅ Python setup complete."
+
+    - name: Install dependencies
+      run: |
+        echo "🔄 Installing dependencies..."
+        python -m pip install --upgrade pip
+        if [ -f smartsuite/requirements.txt ]; then 
+          pip install -r smartsuite/requirements.txt
+        fi
+        echo "✅ Dependencies installed successfully."
+
+    - name: Making migrations
+      run: |
+        echo "🔄 Making Migrations..."
+        python smartsuite/manage.py makemigrations
+        echo "✅ Migrations run successfully."
+
+    - name: Running Migrate
+      run: |
+        echo "🔄 Running Migrate..."
+        python smartsuite/manage.py migrate
+        echo "✅ Migrate command executed successfully."
+
+    - name: Deploy to PythonAnywhere
+      env:
+        PYTHONANYWHERE_USERNAME: ${{ secrets.PYTHONANYWHERE_USERNAME }}
+        PYTHONANYWHERE_API_TOKEN: ${{ secrets.PYTHONANYWHERE_API_TOKEN }}
+      run: |
+        echo "🚀 Starting deployment to PythonAnywhere..."
+
+        # Define your app directory on PythonAnywhere (this may vary)
+        APP_DIR="/home/${{ secrets.PYTHONANYWHERE_USERNAME }}/smartsuiteapisdeployment"
+        
+        echo "📂 Transferring code to PythonAnywhere..."
+        # Copy the code from GitHub to PythonAnywhere
+        scp -r . ${{ secrets.PYTHONANYWHERE_USERNAME }}@ssh.pythonanywhere.com:$APP_DIR
+
+        echo "🔄 Reloading the web app on PythonAnywhere..."
+        # Use the PythonAnywhere API to reload the web app
+        curl -X POST "https://www.pythonanywhere.com/api/v0/user/${{ secrets.PYTHONANYWHERE_USERNAME }}/webapps/${{ secrets.PYTHONANYWHERE_USERNAME }}.pythonanywhere.com/reload/" \
+             -H "Authorization: Token ${{ secrets.PYTHONANYWHERE_API_TOKEN }}"
+        
+        echo "✅ Deployment and web app reload completed successfully!"
