@@ -349,6 +349,7 @@ class CreateKeypointApiView(APIView):
                 
             print(content)
 
+            
             if content is None:
                 return Response({"error": "Unable to decode file content"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
