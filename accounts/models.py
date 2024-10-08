@@ -15,7 +15,7 @@ class CustomUser(AbstractUser):
     username = None
     email = models.EmailField(('email address'), unique=True)
     address = models.CharField(max_length=500, null=True, blank=True)
-    cnic = models.CharField(max_length=13, unique=True, blank=True, null=True)
+    cnic = models.CharField(max_length=15, unique=True, blank=True, null=True)
     date_of_birth = models.DateField(null=True, blank=True)
     phone = PhoneNumberField(null=True, blank=True)
     role =models.CharField(max_length=20, choices=( ('Super Admin', 'Super Admin'), ('Teacher', 'Teacher'), ('Student', 'Student') ), default='Super Admin' )
@@ -25,7 +25,7 @@ class CustomUser(AbstractUser):
 
     groups = models.ManyToManyField(Group, related_name='customuser_set')
     user_permissions = models.ManyToManyField(Permission, related_name='customuser_set')
-    
+
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
@@ -68,7 +68,7 @@ class CustomDepartmentStudent(CustomUser):
         super().save(*args, **kwargs)
 
 class MyAdminSite(AdminSite):
-    
+
     def get_app_list(self, request, app_label=None):
         """
         Return a sorted list of all the installed apps that have been
@@ -90,13 +90,14 @@ class MyAdminSite(AdminSite):
             "Keypoints":13,
             "Quizes":14,
             "QuizResults":15,
+            "Questions":16,
         }
 
         app_dict = self._build_app_dict(request, app_label)
 
         # Sort the apps alphabetically.
         app_list = sorted(app_dict.values(), key=lambda x: x["name"].lower())
-        
+
         # Sort the models custom within each app.
         for app in app_list:
             app['models'].sort(key=lambda x: ordering[x['name']])

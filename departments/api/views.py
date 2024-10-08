@@ -29,15 +29,7 @@ class DepartmentModelViewSet(ModelViewSet):
             'teachers': 'teacher',  # Example mapping, add more if necessary
         }
 
-        changes = {}
-        for request_field, model_field in field_mapping.items():
-            if request_field in request.data:
-                model_value = list(getattr(instance, model_field).values_list('id',
-                                                                              flat=True)) if request_field == 'teachers' else getattr(
-                    instance, model_field)
-                request_value = request.data[request_field]
-                if model_value != request_value:
-                    changes[model_field] = (model_value, request_value)
+        changes = changes or {}
 
         History.objects.create(
             user=request.user,
@@ -57,7 +49,8 @@ class DepartmentModelViewSet(ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         response_data, instance = serializer.save()
-        self.log_history(request, 'CREATE', instance, "Department created")
+        changes = {"description": f"Department '{instance.name}' created with ID {instance.id}."}
+        self.log_history(request, 'CREATE', instance, changes)
         return Response({"message":"Department Created Successfully"}, status=status.HTTP_200_OK)
 
     def put(self, request, *args, **kwargs):
@@ -70,11 +63,13 @@ class DepartmentModelViewSet(ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
+        old_name = instance.name
         partial = kwargs.pop('partial', False)
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         response_data, instance = serializer.save()
-        self.log_history(request, 'UPDATE', instance, request.data)
+        changes = {"description": f"Department '{old_name}' has beed updated to {instance.name}."}
+        self.log_history(request, 'UPDATE', instance, changes)
         return Response({"message":"Department Updated Successfully"}, status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
@@ -86,7 +81,8 @@ class DepartmentModelViewSet(ModelViewSet):
         instance = self.get_object()
         serializer = self.get_serializer()
         serializer.delete(instance)
-        # self.log_history(request, 'DELETE', instance)
+        changes = {"description": f"Department with id '{instance.id}' deleted"}
+        self.log_history(request, 'DELETE', changes)
         return Response({"Success Message": f"Department with id {instance.id} has been deleted successfully"},
                         status=status.HTTP_200_OK)
 

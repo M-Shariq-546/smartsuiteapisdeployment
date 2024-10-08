@@ -32,7 +32,7 @@ class SubjectsModelViewSet(ModelViewSet):
         semester = self.request.query_params.get('semester')
         if semester:
             return Subjects.objects.filter(semester__id=semester)
-        return
+        return Subjects.objects.all()
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -40,25 +40,42 @@ class SubjectsModelViewSet(ModelViewSet):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    def put(self, request, *args, **kwargs):
-        kwargs['partial'] = False
-        return self.update(request, *args, **kwargs)
 
-    def patch(self, request, *args, **kwargs):
-        kwargs['partial'] = True
-        return self.update(request, *args, **kwargs)
+# This is Subject Detail Api view
+class SubjectDetailAPIView(RetrieveAPIView):
+    serializer_class = SubjectSerializer
+    permission_classes = [ViewRightsPermission]
+    queryset = Subjects.objects.all()
+    lookup_field = 'id'
 
-    def destroy(self, request, *args, **kwargs):
-        self.permission_denied(request)
+# This is Subject Delete Api view
+class SubjectDeleteAPIView(DestroyAPIView):
+    serializer_class = SubjectSerializer
+    permission_classes = [IsSuperAdmin]
+    queryset = Subjects.objects.all()
+    lookup_field = 'id'
 
 
+class SubjectsOfTeacher(APIView):
+    serializer_class = SubjectsOfTeacherSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = Subjects.objects.all()
+
+
+    def get(self, request,  *args, **kwargs):
+        teacher = self.request.query_params.get('teacher')
+        serializer = self.serializer_class(Subjects.objects.filter(teacher=teacher), many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+# This Api view works as assigning teacher to subjects and subjects update api view
 class AssignTeacherToSubject(APIView):
     serializer_class = SubjectSerializer
     permission_classes = [IsSuperAdmin]
-    def patch(self, request, id):
+
+    def patch(self, request, id,*args,**kwargs):
         instance = get_object_or_404(Subjects, pk=id)
-        print(instance)
-        print(request.data)
         serializer = self.serializer_class(instance, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
@@ -122,7 +139,7 @@ class SubjectFilesModelViewSet(ModelViewSet):
 # Summary Keypoints and Quizes Sections is going from below
 
 class CreateSummaryApiView(APIView):
-    permission_classes = [IsTeacherforFile | IsStudentForFiles]
+    permission_classes = []
 
     def log_history(self, request, action, instance, changes=None):
         History.objects.create(
@@ -132,6 +149,22 @@ class CreateSummaryApiView(APIView):
             instance_id = instance.id,
             changes = changes,
         )
+
+    def get(self , request, *args , **kwargs):
+        file = self.request.query_params.get('file')
+
+        if file is None:
+            return Response({"File id is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        summary = DocumentSummary.objects.filter(document__id=file).first()
+        if summary is None:
+            return Response({"error": "No summary found for this file"}, status=status.HTTP_404_NOT_FOUND)
+        if request.user.role in ['Super Admin' , 'Student']:
+            return Response({"summary_id":summary.id, "summary":summary.summary}, status=status.HTTP_200_OK)
+        return Response({"summary_id":summary.id, "summary":summary.summary, "prompt":summary.prompt}, status=status.HTTP_200_OK)
+
+
+
 
     def post(self, request):
         user = request.user
@@ -150,26 +183,20 @@ class CreateSummaryApiView(APIView):
             if summary_count >= 3:
                 return Response({"Limit Exceeded":"Your Limits of Summary Generation for this Document has Exceeded"}, status=status.HTTP_510_NOT_EXTENDED)
 
-            print(document)
-            
+
             try:
                 file = PDFFiles.objects.get(id=document, is_active=True)
             except:
                 return Response({"Not Found":"No Associated File Found"}, status=status.HTTP_404_NOT_FOUND)
-                
-            print(file)
-            print(file.file)
-            print(file.file.url)
-            print(file.file.path)
+
             try:
                 content = read_file_content(file.file)
             except:
                 content = read_file_content(file.file.url)
             else:
                 content = read_file_content(file.file.path)
-                
-            print(content)
-            
+
+
             if content is None:
                 return Response({"error": "Unable to decode file content"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -197,10 +224,39 @@ class CreateSummaryApiView(APIView):
         return Response({"Access Denied": "You Are not Allowed to create summary"},
                             status=status.HTTP_401_UNAUTHORIZED)
 
+class FileUpdteApiView(APIView):
+    serializer_class = PDFSerializers
+    permission_classes = [IsTeacherforFile]
+
+    def get(self,request, id , *args , **kwargs):
+        instance = get_object_or_404(PDFFiles, id=id)
+        serializer = self.serializer_class(instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+    def patch(self, request, id, *args, **kwargs):
+        instance = get_object_or_404(PDFFiles, id=id)
+        data = request.data.copy()
+        data.update(request.FILES)
+
+        serializer = self.serializer_class(instance, data=data, partial=True)  # Use partial=True for patch
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()  # Save the instance
+            return Response({"message": "File updated Successfully"}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+    def delete(self,request, id , *args , **kwargs):
+        instance = get_object_or_404(PDFFiles, id=id)
+        instance.is_active=False
+        instance.save()
+        return Response({"message":"File Deleted Successfully"}, status=status.HTTP_200_OK)
+
+
 
 # kEYPOINTS APIVIEW
 class CreateKeypointApiView(APIView):
-    permission_classes = [IsTeacherforFile | IsStudentForFiles]
+    permission_classes = []
 
     def log_history(self, request, action, instance, changes=None):
         History.objects.create(
@@ -210,6 +266,22 @@ class CreateKeypointApiView(APIView):
             instance_id = instance.id,
             changes = changes,
         )
+
+
+    def get(self , request, *args , **kwargs):
+        file = self.request.query_params.get('file')
+
+        if file is None:
+            return Response({"File id is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        summary = DocumentKeypoint.objects.filter(document__id=file).first()
+        if summary is None:
+            return Response({"error": "No Keypoints found for this file"}, status=status.HTTP_404_NOT_FOUND)
+
+        if request.user.role in ['Super Admin' , 'Student']:
+            return Response({"keypoints_id":summary.id, "keypoints":summary.keypoint}, status=status.HTTP_200_OK)
+        return Response({"keypoints_id":summary.id, "keypoints":summary.keypoint, "prompt":summary.prompt}, status=status.HTTP_200_OK)
+
 
     def post(self, request):
         user = request.user
@@ -229,19 +301,14 @@ class CreateKeypointApiView(APIView):
                 return Response({"Limit Exceeded":"Your Limits of Keypoints Generation for this Document has Exceeded"}, status=status.HTTP_510_NOT_EXTENDED)
 
             print(document)
-            
+
             try:
                 file = PDFFiles.objects.get(id=document, is_active=True)
             except:
                 return Response({"Not Found":"No Associated File Found"}, status=status.HTTP_404_NOT_FOUND)
 
-            print(file)
-            print(file.file)
-        
             content = read_file_content(file.file)
 
-            print(content)
-            
             if content is None:
                 return Response({"error": "Unable to decode file content"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -350,7 +417,7 @@ class CreateQuizessApiView(APIView):
 
             try:
                 document = PDFFiles.objects.get(id=document_id, is_active=True)
-            except PDFiles.DoesNotExist:
+            except PDFFiles.DoesNotExist:
                 return Response({"error": "No Document Found"}, status=status.HTTP_404_NOT_FOUND)
 
             user = request.user
@@ -371,10 +438,7 @@ class CreateQuizessApiView(APIView):
                     {"error": "Quiz creation limit reached. No more than 5 quizzes allowed for this document."},
                     status=status.HTTP_400_BAD_REQUEST)
 
-            
-            print(file)
-            print(file.file)
-            
+
             content = read_file_content(document.file)
 
             if content is None:

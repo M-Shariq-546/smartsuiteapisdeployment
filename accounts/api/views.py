@@ -1,3 +1,4 @@
+from rest_framework import filters
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
@@ -85,6 +86,9 @@ class LoginApiView(APIView):
                         'role': serializer.data['role'],
                         'college_roll_number':serializer.data['college_roll_number'],
                         'university_roll_number':serializer.data['university_roll_number'],
+                        'department':serializer.data['department'],
+                        'course':serializer.data['course'],
+                        'batch':serializer.data['batch'],
                         'created_at': serializer.data['created_at'],
                     }
                 else:
@@ -120,11 +124,17 @@ class LoginApiView(APIView):
 class TeachersListApiView(ListAPIView):
     serializer_class = TeachersListSerializer
     permission_classes = [IsSuperAdmin]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['email', 'id', 'first_name', 'last_name', 'father_name', 'employee_code', 'cnic', 'date_of_birth', 'phone']
+    ordering_fields = ['email', 'id', 'first_name', 'last_name', 'father_name', 'college_roll_number', 'university_roll_number', 'cnic', 'date_of_birth', 'phone']
     queryset = CustomDepartmentTeacher.objects.all()
 
 class StudentsListApiView(ListAPIView):
     serializer_class = StudentsListSerializer
     permission_classes = [IsSuperAdmin]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['email', 'id', 'first_name', 'last_name', 'father_name', 'college_roll_number', 'university_roll_number', 'cnic', 'date_of_birth', 'phone']
+    ordering_field = ['email', 'id', 'first_name', 'last_name', 'father_name', 'college_roll_number', 'university_roll_number', 'cnic', 'date_of_birth', 'phone']
     queryset = CustomDepartmentStudent.objects.all()
 
 class CreateUsersApiView(CreateAPIView):
@@ -156,12 +166,12 @@ class CreateUsersApiView(CreateAPIView):
     def create(self, request, *args, **kwargs):
         user = self.request.user
         new_requested_role = request.data.get('role')
-        
+
         if not user.is_authenticated:
             return Response({"detail": "Authentication required."}, status=status.HTTP_401_UNAUTHORIZED)
 
         email = request.data.get('email')
-        
+
         try:
             user_data = CustomUser.objects.filter(email=email).exists()
             if user_data:
@@ -169,7 +179,7 @@ class CreateUsersApiView(CreateAPIView):
         except CustomUser.DoesNotExist:
             pass  # User does not exist, proceed with creation
 
-        
+
         if user.role == 'Super Admin':
             pass  # Super Admin can create any user
 
@@ -207,16 +217,16 @@ class UpdateAccountApiView(UpdateAPIView):
     queryset = CustomUser.objects.all()
     permission_classes = [IsSuperAdmin]
     lookup_field = 'id'
-    
+
     def put(self, request, *args, **kwargs):
         kwargs['partial'] = False
         return self.update(request, *args, **kwargs)
-    
+
     def patch(self, request, *args, **kwargs):
         kwargs['partial'] = True
         return self.update(request, *args, **kwargs)
-    
-    
+
+
     def update(self , request , *args , **kwargs):
         instance = self.get_object()
         if isinstance(instance, CustomDepartmentStudent):
@@ -342,7 +352,7 @@ class StudentGetDataApiView(APIView):
     def get(self, request):
         student = self.request.query_params.get('student')
 
-        batch = Batch.objects.get(student__id=student)
+        batch = Batch.objects.get(student=student)
 
         semesters = [{"semester_name":semester.name, "is_active":semester.is_active} for semester in Semester.objects.filter(batch=batch.id)]
 
@@ -375,7 +385,7 @@ class StudentGetDataApiView(APIView):
                         'quiz_name': quiz.name,
                         'status': "Not Attempted",
                     })
-            
+
             quiz_data = {
                 'subject_name':subject,
                 "quizes_count":no_of_quiz,

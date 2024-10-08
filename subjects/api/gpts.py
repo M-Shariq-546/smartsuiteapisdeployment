@@ -4,9 +4,14 @@ import logging
 import openai
 import os
 import chardet
-import pdfplumber    
+import pdfplumber
+from dotenv import load_dotenv
+
+load_dotenv()  # This loads the .env file automatically
 openai_api_key = os.getenv('API_KEY')
-# openai_api_key  = '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'
+
+# openai_api_key = os.getenv('API_KEY')
+openai_api_key  = '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'
 
 logging.basicConfig(filename='app.log', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -46,7 +51,7 @@ def generate_keypoints_from_gpt(content, prompt):
 # Quizes Generations from gpt
 def generate_quizes_from_gpt(content):
     openai.api_key = openai_api_key
-    prompt = f"You are the teacher, Provide me a random number of quizzes with a maximum limit of 10 questions, each containing 4 options as MCQs. Indicate the correct option by labeling it A, B, C, or D and answer as 'Correct Answer'. Ensure the quizzes are different each time and challenging:\n\n{content[:7500]}\nPlease ensure your response is concise with no extra text, and format questions as 'Question:', and options as 'A:', 'B:', etc and aswer as 'Correct Answer: 'Correct Option''. please strictly follow this pattern for quiz and no other pattern will be allowed for quiz. Only allowed pattern is of question is 'Question:' and nothing else is allowed and make sure no new line will be in between 'Question:' and question heading"
+    prompt = f"You are the teacher, Provide me quizzes with a maximum limit of 10 questions, each containing 4 options as MCQs. Indicate the correct option by labeling it A, B, C, or D and answer as 'Correct Answer'. Ensure the quizzes are different each time and challenging, apply all previous requirements on this content:\n\n{content[:7500]}\nPlease ensure your response is concise with no extra text, and format questions as 'Question:', and options as 'A:', 'B:', etc and aswer as 'Correct Answer: 'Correct Option''. please strictly follow this pattern for quiz and no other pattern will be allowed for quiz. Only allowed pattern is of question is 'Question:' and nothing else is allowed and make sure no new line will be in between 'Question:' and question heading"
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[

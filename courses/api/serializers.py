@@ -10,9 +10,9 @@ class CoursesSerializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_kwargs = {
             'is_active':{'required':False},
-            'created_at':{'required':False}   
+            'created_at':{'required':False}
         }
-        
+
     def create(self , validated_data):
         name = validated_data['name']
         department = validated_data['department']
@@ -40,7 +40,7 @@ class CoursesSerializer(serializers.ModelSerializer):
         department = validated_data['department']
 
         if instance.name != name:
-            if Course.objects.filter(name = name, is_active=True).exists():
+            if Course.objects.filter(name__iexact=name, is_active=True).exists():
                 raise serializers.ValidationError({"Duplication Error":f"This name is already existed for course"})
 
         instance.name = name

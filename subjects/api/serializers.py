@@ -30,12 +30,31 @@ class PDFSerializers(serializers.ModelSerializer):
         return responses, new_file
 
     def update(self, instance, validated_data):
-        instance.subject = validated_data.get('subject', instance.subject)
-        instance.name = validated_data.get('name', instance.name)
-        instance.file = validated_data.get('file', instance.file)
-        instance.is_active = validated_data.get('is_active', instance.is_active)
-        instance.save()
+        file = validated_data.pop('file', None)
+        name = validated_data.pop('name', None)
+
+        if file is not None and name is not None:
+            instance.file = file
+            instance.name =name
+            instance.save()
+        elif name is not None:
+            instance.name = name
+            instance.save()
+        elif file is not None:
+            instance.file = file
+            instance.save()
+        else:
+            raise serializers.ValidationError("File Or Name is Required")
+
         return instance
+
+
+
+class SubjectsOfTeacherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subjects
+        fields =  '__all__'
+
 
 class SubjectSerializer(serializers.ModelSerializer):
     class Meta:
@@ -49,7 +68,7 @@ class SubjectSerializer(serializers.ModelSerializer):
         if name is None or code is None:
             raise serializers.ValidationError({"Error":"subject_code or name is missings"})
 
-        if name is not None and code is not None and Subjects.objects.filter(name =name , subject_code=code).exists():
+        if name is not None and code is not None and Subjects.objects.filter(name__iexact=name).exists():
             raise serializers.ValidationError({"Invalid Entry":f"The subject is already exists for these credentials"})
 
         new_subject = Subjects.objects.create(**validated_data)
@@ -59,15 +78,20 @@ class SubjectSerializer(serializers.ModelSerializer):
     def update(self, instance , validated_data):
         name = validated_data.pop('name', None)
         teacher = validated_data.pop('teacher', None)
-
         if teacher and name:
+            if instance.name != name.strip().lower():
+                if Subjects.objects.filter(name__iexact=name).exists():
+                    raise serializers.ValidationError({"Invalid Entry":f"Subject with similar name 'P{name}' already exists"})
+                instance.name = name
             instance.teacher = teacher
-            instance.name = name
             instance.save()
         elif teacher is not None:
             instance.teacher = teacher
             instance.save()
         elif name is not None:
+            if instance.name != name.strip().lower():
+                if Subjects.objects.filter(name__iexact=name).exists():
+                    raise serializers.ValidationError({"Invalid Entry":f"Subject with similar name 'P{name}' already exists"})
             instance.name = name
             instance.save()
         else:

@@ -63,9 +63,15 @@ class StudentsListSerializer(serializers.ModelSerializer):
                   'created_at']
 
     def get_batch(self, obj):
-        print(Batch.objects.get(student__id=obj.id))
-        batch = Batch.objects.get(student__id=obj.id)
-        return batch.name
+        try:
+            batch = Batch.objects.get(student__id=obj.id)
+            return batch.name
+        except Batch.DoesNotExist:
+            return None
+        except Batch.MultipleObjectsReturned:
+            batches = Batch.objects.filter(student__id=obj.id)
+            return batches.first().name
+
 
     def get_age(self, obj):
         if obj.date_of_birth:
@@ -183,10 +189,13 @@ class CustomTeacherUserDetailSerializer(serializers.ModelSerializer):
 
 class CustomStudentUserDetailSerializer(serializers.ModelSerializer):
     age = serializers.SerializerMethodField(read_only=True)
+    batch = serializers.SerializerMethodField(read_only=True)
+    department = serializers.SerializerMethodField(read_only=True)
+    course = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = CustomDepartmentStudent
         fields = ['id', 'first_name', 'last_name', 'father_name', 'address', 'cnic', 'date_of_birth', 'age', 'email',
-                  'phone', 'role', 'college_roll_number', 'university_roll_number', 'created_at']
+                  'phone', 'role', 'college_roll_number', 'university_roll_number', 'department', 'course', 'batch', 'created_at']
 
     def get_age(self, obj):
         if obj.date_of_birth:
@@ -195,6 +204,19 @@ class CustomStudentUserDetailSerializer(serializers.ModelSerializer):
                         (today.month, today.day) < (obj.date_of_birth.month, obj.date_of_birth.day))
             return age
         return None
+
+    def  get_batch(self, obj):
+        student_batch = Batch.objects.get(student=obj.id)
+        return [student_batch.id, student_batch.name]
+
+    def get_course(self, obj):
+        student_batch = Batch.objects.get(student=obj.id)
+        return [student_batch.course.id, student_batch.course.name]
+
+    def get_department(self, obj):
+        student_batch = Batch.objects.get(student=obj.id)
+        return [student_batch.course.department.id, student_batch.course.department.name]
+
 
 
 class CustomTeacherUserSerializer(serializers.ModelSerializer):

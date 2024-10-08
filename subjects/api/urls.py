@@ -7,9 +7,14 @@ router = DefaultRouter()
 router.register(r'subjects', SubjectsModelViewSet, basename="crud_subjects")
 router.register(r'files', SubjectFilesModelViewSet, basename='subject_files')
 
+
 urlpatterns = [
     path('',include(router.urls)),
-    path('subject/<str:id>/', AssignTeacherToSubject.as_view(), name='assign_teacher_to_subject'),
+    path('subjects_of_teacher/', SubjectsOfTeacher.as_view(), name='subjects_of_teachers'),
+    path('subject_delete/<str:id>/', SubjectDeleteAPIView.as_view(), name='subject_delete'),
+    path('file/<str:id>/', FileUpdteApiView.as_view(), name='file_update'),
+    path('subject_detail/<str:id>/', SubjectDetailAPIView.as_view(), name='subject_detail'),
+    path('subject_update/<str:id>/', AssignTeacherToSubject.as_view(), name='assign_teacher_to_subject'),
     path('summary/', CreateSummaryApiView.as_view(), name='summary'),
     path('keypoints/', CreateKeypointApiView.as_view(), name='keypoints'),
     path('quiz/upload/', UploadQuiz.as_view(), name="uploadQuiz"),
