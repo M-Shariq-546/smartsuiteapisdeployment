@@ -55,7 +55,6 @@ jobs:
         # Define your app directory on PythonAnywhere (this may vary)
         APP_DIR="/home/${{ secrets.PYTHONANYWHERE_USERNAME }}/smartsuiteapisdeployment"
 
-
         mkdir -p ~/.ssh  
         echo "${{ secrets.PYTHONANYWHERE_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
