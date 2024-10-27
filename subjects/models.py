@@ -12,6 +12,7 @@ class Subjects(models.Model):
     is_lab = models.BooleanField(default=False)
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
     teacher = models.ForeignKey(CustomDepartmentTeacher, on_delete=models.CASCADE, null=True, blank=True, related_name='subject_teacher')
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.name} with code {self.subject_code} belongs to {self.semester.name}"

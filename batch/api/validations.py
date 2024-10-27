@@ -11,7 +11,7 @@ def validate_batch(batch_name):
 
 def students_validations(students):
     for student in students:
-        if Batch.objects.filter(student=student).exists():
+        if Batch.objects.filter(student=student, is_active= True).exists():
             return True, student
     return False, None
 
@@ -22,7 +22,7 @@ def adding_students_in_batch(instance, students):
 
 
 def getStudentsList(instance):
-    return [student.id for student in instance.student.all()]
+    return [student.id for student in instance.student.filter(is_active=True , is_deleted=False)]
 
 def semester_name_setup(number, batch_name):
     return f"Semester # {number} of {batch_name.name}"
@@ -32,8 +32,8 @@ def create_semesters(self, batch_id, course_id, added_by_id):
     from ..models import Batch
     from courses.models import Course
     from accounts.models import CustomUser # Import inside the task to avoid circular imports
-    batch = Batch.objects.get(id=batch_id)
-    course = Course.objects.get(id=course_id)
+    batch = Batch.objects.get(id=batch_id, is_active= True)
+    course = Course.objects.get(id=course_id, is_active= True)
     added_by = CustomUser.objects.get(id=added_by_id)
 
     for i in range(1, 9):

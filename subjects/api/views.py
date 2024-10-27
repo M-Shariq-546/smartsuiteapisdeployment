@@ -15,7 +15,7 @@ from rest_framework.permissions import IsAuthenticated
 
 class SubjectsModelViewSet(ModelViewSet):
     serializer_class = SubjectSerializer
-    queryset = Subjects.objects.all()
+    queryset = Subjects.objects.filter(is_active=True)
     permission_classes = [IsAuthenticated]
 
     def get_permissions(self):
@@ -31,7 +31,7 @@ class SubjectsModelViewSet(ModelViewSet):
     def get_queryset(self):
         semester = self.request.query_params.get('semester')
         if semester:
-            return Subjects.objects.filter(semester__id=semester)
+            return Subjects.objects.filter(semester__id=semester, is_active= True)
         return Subjects.objects.all()
 
     def create(self, request, *args, **kwargs):
@@ -45,21 +45,21 @@ class SubjectsModelViewSet(ModelViewSet):
 class SubjectDetailAPIView(RetrieveAPIView):
     serializer_class = SubjectSerializer
     permission_classes = [ViewRightsPermission]
-    queryset = Subjects.objects.all()
+    queryset = Subjects.objects.filter(is_active=True)
     lookup_field = 'id'
 
 # This is Subject Delete Api view
 class SubjectDeleteAPIView(DestroyAPIView):
     serializer_class = SubjectSerializer
     permission_classes = [IsSuperAdmin]
-    queryset = Subjects.objects.all()
+    queryset = Subjects.objects.filter(is_active= True)
     lookup_field = 'id'
 
 
 class SubjectsOfTeacher(APIView):
     serializer_class = SubjectsOfTeacherSerializer
     permission_classes = [IsAuthenticated]
-    queryset = Subjects.objects.all()
+    queryset = Subjects.objects.filter(is_active= True)
 
 
     def get(self, request,  *args, **kwargs):

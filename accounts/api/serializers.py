@@ -38,7 +38,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
         return obj.password
 
     def validate_email(self, value):
-        if CustomUser.objects.filter(email=value).exists():
+        if CustomUser.objects.filter(email=value, is_active=True , is_deleted=False).exists():
             raise serializers.ValidationError("A user with this email already exists.")
         return value
 
@@ -64,12 +64,12 @@ class StudentsListSerializer(serializers.ModelSerializer):
 
     def get_batch(self, obj):
         try:
-            batch = Batch.objects.get(student__id=obj.id)
+            batch = Batch.objects.get(student__id=obj.id, is_active=True)
             return batch.name
         except Batch.DoesNotExist:
             return None
         except Batch.MultipleObjectsReturned:
-            batches = Batch.objects.filter(student__id=obj.id)
+            batches = Batch.objects.filter(student__id=obj.id, is_active=True)
             return batches.first().name
 
 
@@ -93,8 +93,11 @@ class TeachersListSerializer(serializers.ModelSerializer):
                   'created_at']
 
     def get_department(self, obj):
-        dept = Department.objects.get(teacher__id=obj.id)
-        return dept.name
+        try:
+            dept = Department.objects.get(teacher__id=obj.id, is_active=True)
+            return dept.name
+        except:
+            return None
 
     def get_age(self, obj):
         if obj.date_of_birth:
@@ -123,7 +126,7 @@ class CustomStudentUserSerializer(serializers.ModelSerializer):
         return obj.password
 
     def validate_email(self, value):
-        if CustomUser.objects.filter(email=value).exists():
+        if CustomUser.objects.filter(email=value, is_active=True , is_deleted=False).exists():
             raise serializers.ValidationError("A Student with this email already exists.")
         return value
 
@@ -206,15 +209,15 @@ class CustomStudentUserDetailSerializer(serializers.ModelSerializer):
         return None
 
     def  get_batch(self, obj):
-        student_batch = Batch.objects.get(student=obj.id)
+        student_batch = Batch.objects.get(student=obj.id, is_active=True)
         return [student_batch.id, student_batch.name]
 
     def get_course(self, obj):
-        student_batch = Batch.objects.get(student=obj.id)
+        student_batch = Batch.objects.get(student=obj.id, is_active=True)
         return [student_batch.course.id, student_batch.course.name]
 
     def get_department(self, obj):
-        student_batch = Batch.objects.get(student=obj.id)
+        student_batch = Batch.objects.get(student=obj.id, is_active=True)
         return [student_batch.course.department.id, student_batch.course.department.name]
 
 
@@ -236,7 +239,7 @@ class CustomTeacherUserSerializer(serializers.ModelSerializer):
         return obj.password
 
     def validate_email(self, value):
-        if CustomUser.objects.filter(email=value).exists():
+        if CustomUser.objects.filter(email=value, is_active=True , is_deleted=False).exists():
             raise serializers.ValidationError("A Teacher with this email already exists.")
         return value
 

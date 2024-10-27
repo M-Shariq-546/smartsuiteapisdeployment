@@ -39,7 +39,7 @@ class LoginApiView(APIView):
             # Additional data checking (e.g., existence in DB)
             try:
                 if user.role == 'Teacher':
-                    user_data = CustomDepartmentTeacher.objects.get(email=email)
+                    user_data = CustomDepartmentTeacher.objects.get(email=email, is_active=True , is_deleted=False)
                     serializer = CustomTeacherUserDetailSerializer(user_data)
 
                     refresh = RefreshToken.for_user(user)
@@ -64,7 +64,7 @@ class LoginApiView(APIView):
                         'created_at': serializer.data['created_at'],
                     }
                 elif user.role == 'Student':
-                    user_data = CustomDepartmentStudent.objects.get(email=email)
+                    user_data = CustomDepartmentStudent.objects.get(email=email, is_active=True , is_deleted=False)
                     serializer = CustomStudentUserDetailSerializer(user_data)
                     refresh = RefreshToken.for_user(user)
                     token = {
@@ -92,7 +92,7 @@ class LoginApiView(APIView):
                         'created_at': serializer.data['created_at'],
                     }
                 else:
-                    user_data = CustomUser.objects.get(email=email)
+                    user_data = CustomUser.objects.get(email=email, is_active=True , is_deleted=False)
                     serializer = CustomUserDetailSerializer(user_data)
                     refresh = RefreshToken.for_user(user)
                     token = {
@@ -127,7 +127,7 @@ class TeachersListApiView(ListAPIView):
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['email', 'id', 'first_name', 'last_name', 'father_name', 'employee_code', 'cnic', 'date_of_birth', 'phone']
     ordering_fields = ['email', 'id', 'first_name', 'last_name', 'father_name', 'college_roll_number', 'university_roll_number', 'cnic', 'date_of_birth', 'phone']
-    queryset = CustomDepartmentTeacher.objects.all()
+    queryset = CustomDepartmentTeacher.objects.filter(is_active=True , is_deleted=False)
 
 class StudentsListApiView(ListAPIView):
     serializer_class = StudentsListSerializer
@@ -135,11 +135,21 @@ class StudentsListApiView(ListAPIView):
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['email', 'id', 'first_name', 'last_name', 'father_name', 'college_roll_number', 'university_roll_number', 'cnic', 'date_of_birth', 'phone']
     ordering_field = ['email', 'id', 'first_name', 'last_name', 'father_name', 'college_roll_number', 'university_roll_number', 'cnic', 'date_of_birth', 'phone']
-    queryset = CustomDepartmentStudent.objects.all()
+    queryset = CustomDepartmentStudent.objects.filter(is_active=True , is_deleted=False)
+
+
+    def get_queryset(self):
+        return CustomDepartmentStudent.objects.filter(
+            is_active=True,
+            is_deleted=False,
+            batch_students__is_active=True,  # The student's batch is active
+            batch_students__course__is_active=True,  # The course related to the batch is active
+            batch_students__course__department__is_active=True  # The department related to the course is active
+        ).distinct()
 
 class CreateUsersApiView(CreateAPIView):
     serializer_class = CustomUserSerializer
-    queryset = CustomUser.objects.all()
+    queryset = CustomUser.objects.filter(is_active=True , is_deleted=False)
     def log_history(self, request , action , instance, changes=None):
         field_mapping = {
             'teachers': 'teacher',  # Example mapping, add more if necessary
@@ -173,7 +183,7 @@ class CreateUsersApiView(CreateAPIView):
         email = request.data.get('email')
 
         try:
-            user_data = CustomUser.objects.filter(email=email).exists()
+            user_data = CustomUser.objects.filter(email=email, is_active=True , is_deleted=False).exists()
             if user_data:
                 return Response({"error": f"{new_requested_role} with this email {email} already exists"}, status=status.HTTP_400_BAD_REQUEST)
         except CustomUser.DoesNotExist:
@@ -252,7 +262,7 @@ class UpdateAccountApiView(UpdateAPIView):
 
 class DeleteCustomUserApiView(DestroyAPIView):
     serializer_class = CustomUserSerializer
-    queryset = CustomUser.objects.all()
+    queryset = CustomUser.objects.filter(is_active=True , is_deleted=False)
     lookup_field = 'id'
 
     def delete(self, request, *args, **kwargs):
@@ -291,8 +301,8 @@ class StudentCountView(APIView):
 
         # Adding the current year count separately if not included
         current_year_data = Batch.objects.filter(year=current_year_value, is_active=True).aggregate(count=Count('student'))
-        total_teachers = CustomDepartmentTeacher.objects.all().count()
-        total_students = CustomDepartmentStudent.objects.all().count()
+        total_teachers = CustomDepartmentTeacher.objects.filter(is_active=True , is_deleted=False).count()
+        total_students = CustomDepartmentStudent.objects.filter(is_active=True , is_deleted=False).count()
         total_departments = Department.objects.filter(is_active=True).count()
         response_data = {
             'total_teachers': total_teachers,
@@ -311,11 +321,11 @@ class TeacherGetDataApiView(APIView):
         try:
             teacher_id = self.request.query_params.get('teacher')
 
-            department = Department.objects.get(teacher=teacher_id)
+            department = Department.objects.get(teacher=teacher_id,is_active=True)
 
-            courses = [{"id":course.id, "course_name":course.name} for course in Course.objects.filter(department__id=department.id)]
+            courses = [{"id":course.id, "course_name":course.name} for course in Course.objects.filter(department__id=department.id,is_active=True)]
 
-            subjects = [{"id":subject.id, "subject_name":subject.name, 'lab':subject.is_lab} for subject in Subjects.objects.filter(teacher__id=teacher_id)]
+            subjects = [{"id":subject.id, "subject_name":subject.name, 'lab':subject.is_lab} for subject in Subjects.objects.filter(teacher__id=teacher_id, is_active=True)]
 
             no_of_courses = len(courses)
             no_of_subjects_asssigned = len(subjects)
@@ -352,13 +362,13 @@ class StudentGetDataApiView(APIView):
     def get(self, request):
         student = self.request.query_params.get('student')
 
-        batch = Batch.objects.get(student=student)
+        batch = Batch.objects.get(student=student,is_active=True)
 
-        semesters = [{"semester_name":semester.name, "is_active":semester.is_active} for semester in Semester.objects.filter(batch=batch.id)]
+        semesters = [{"semester_name":semester.name, "is_active":semester.is_active} for semester in Semester.objects.filter(batch=batch.id, is_active=True)]
 
-        active_semester = Semester.objects.get(batch=batch, is_active=True)
+        active_semester = Semester.objects.get(batch_id=batch.id, is_active=True)
 
-        subjects = [subject.name for subject in Subjects.objects.filter(semester__id=active_semester.id)]
+        subjects = [subject.name for subject in Subjects.objects.filter(semester__id=active_semester.id, is_active=True)]
 
         no_of_quizes_per_subeject = []
 

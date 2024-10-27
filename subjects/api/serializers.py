@@ -68,19 +68,19 @@ class SubjectSerializer(serializers.ModelSerializer):
         if name is None or code is None:
             raise serializers.ValidationError({"Error":"subject_code or name is missings"})
 
-        if name is not None and code is not None and Subjects.objects.filter(name__iexact=name).exists():
-            raise serializers.ValidationError({"Invalid Entry":f"The subject is already exists for these credentials"})
+        if name is not None and code is not None and Subjects.objects.filter(subject_code__iexact=code, is_active=True).exists():
+            raise serializers.ValidationError({"Invalid Entry":f"The subject is already exists for this Code"})
 
         new_subject = Subjects.objects.create(**validated_data)
 
         return new_subject
 
     def update(self, instance , validated_data):
-        name = validated_data.pop('name', None)
+        name = validated_data.pop('name', instance.name)
         teacher = validated_data.pop('teacher', None)
         if teacher and name:
-            if instance.name != name.strip().lower():
-                if Subjects.objects.filter(name__iexact=name).exists():
+            if instance.name.lower() != name.strip().lower():
+                if Subjects.objects.filter(name__iexact=name, is_active=True).exists():
                     raise serializers.ValidationError({"Invalid Entry":f"Subject with similar name 'P{name}' already exists"})
                 instance.name = name
             instance.teacher = teacher
@@ -89,8 +89,8 @@ class SubjectSerializer(serializers.ModelSerializer):
             instance.teacher = teacher
             instance.save()
         elif name is not None:
-            if instance.name != name.strip().lower():
-                if Subjects.objects.filter(name__iexact=name).exists():
+            if instance.name.lower() != name.strip().lower():
+                if Subjects.objects.filter(name__iexact=name, is_active=True).exists():
                     raise serializers.ValidationError({"Invalid Entry":f"Subject with similar name 'P{name}' already exists"})
             instance.name = name
             instance.save()

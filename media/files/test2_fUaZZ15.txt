@@ -1,0 +1,12 @@
+1.Ride can be schedule by admin before the actual time of ride.
+2.Previous rides are not showing to user and rider.
+3.Location is not actual as it should be.(example in notification show punjab)
+4.This app is not for those who use app gallery
+5.When user end the ride it did not notify the rider that the ride has been completed by user.
+6.Some time null notification show to user end 
+7.Ride can be start without code verfication done.
+8.If user end the ride at any time before reach to destination rider can not end it so rider have to move back to home screen to check that it is still in progress.
+9.Due to any reason user complete the ride but because it is not possible for user to end the ride to its own but the rider who is on map section where ride screen showing on my way on something else by click that button ride can be start from user end also 
+10.Sos is not implemented
+11.reached notification not show
+12.In dropdown of dropoff and pick up one is selected then other is still showing that option in select options section and if both are same there is no error shown to user.

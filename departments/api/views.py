@@ -82,7 +82,7 @@ class DepartmentModelViewSet(ModelViewSet):
         serializer = self.get_serializer()
         serializer.delete(instance)
         changes = {"description": f"Department with id '{instance.id}' deleted"}
-        self.log_history(request, 'DELETE', changes)
+        self.log_history(request, 'DELETE', instance , changes)
         return Response({"Success Message": f"Department with id {instance.id} has been deleted successfully"},
                         status=status.HTTP_200_OK)
 
@@ -90,7 +90,7 @@ class DepartmentModelViewSet(ModelViewSet):
 class TeacherofDepartmentApiView(APIView):
     serializer_class = TeachersofDepartment
     permission_classes = [IsAuthenticated]
-    queryset = Department.objects.all()
+    queryset = Department.objects.filter(is_active=True)
 
     def get_permissions(self):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
@@ -107,10 +107,10 @@ class TeacherofDepartmentApiView(APIView):
             return Response({"error": "Department ID is required."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            department = Department.objects.get(id=department_id)
+            department = Department.objects.get(id=department_id, is_active=True)
         except Department.DoesNotExist:
             return Response({"error": "Department not found."}, status=status.HTTP_404_NOT_FOUND)
 
-        teachers = department.teacher.all()
+        teachers = department.teacher.filter(is_active=True , is_deleted=False)
         serializer = self.serializer_class(teachers, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

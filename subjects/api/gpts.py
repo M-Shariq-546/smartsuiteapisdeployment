@@ -8,10 +8,10 @@ import pdfplumber
 from dotenv import load_dotenv
 
 load_dotenv()  # This loads the .env file automatically
-openai_api_key = os.getenv('API_KEY')
+openai_api_key = ''
 
 # openai_api_key = os.getenv('API_KEY')
-openai_api_key  = os.getenv('API_KEY')
+# openai_api_key  = os.getenv('API_KEY')
 
 logging.basicConfig(filename='app.log', level=logging.INFO)
 logger = logging.getLogger(__name__)

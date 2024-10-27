@@ -15,13 +15,15 @@ class CustomUser(AbstractUser):
     username = None
     email = models.EmailField(('email address'), unique=True)
     address = models.CharField(max_length=500, null=True, blank=True)
-    cnic = models.CharField(max_length=15, unique=True, blank=True, null=True)
+    cnic = models.CharField(max_length=15, blank=True, null=True)
     date_of_birth = models.DateField(null=True, blank=True)
     phone = PhoneNumberField(null=True, blank=True)
     role =models.CharField(max_length=20, choices=( ('Super Admin', 'Super Admin'), ('Teacher', 'Teacher'), ('Student', 'Student') ), default='Super Admin' )
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
     added_by = models.ForeignKey("self", models.CASCADE, default=None, null=True)
+    is_active=models.BooleanField(default=True)
+    is_deleted=models.BooleanField(default=False)
 
     groups = models.ManyToManyField(Group, related_name='customuser_set')
     user_permissions = models.ManyToManyField(Permission, related_name='customuser_set')
