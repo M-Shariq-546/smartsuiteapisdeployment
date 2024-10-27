@@ -542,3 +542,147 @@ KeyError: 'departments'
 INFO:django.utils.autoreload:D:\fyp\SmartSuiteBackend\smartsuite\accounts\api\views.py changed, reloading.
 INFO:django.utils.autoreload:D:\fyp\SmartSuiteBackend\smartsuite\accounts\api\views.py changed, reloading.
 INFO:django.utils.autoreload:D:\fyp\SmartSuiteBackend\smartsuite\smartsuite\settings.py changed, reloading.
+WARNING:django.request:Not Found: /favicon.ico
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\semesters\api\views.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\semesters\api\serializers.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\semesters\api\views.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\subjects\api\serializers.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\subjects\api\views.py changed, reloading.
+WARNING:django.request:Bad Request: /api/create-account/
+WARNING:django.request:Not Found: /api/subject/2cfaf793-f669-4a23-b377-c6daf75ba993/
+WARNING:django.request:Not Found: /api/subject_update/2cfaf793-f669-4a23-b377-c6daf75ba993/
+WARNING:django.request:Unauthorized: /api/students_of_subjects/
+WARNING:django.request:Forbidden: /api/students_of_subjects/
+ERROR:django.request:Internal Server Error: /api/students_of_subjects/
+Traceback (most recent call last):
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\fyp\Deployed apis\subjects\api\views.py", line 25, in get
+    response = serializer.get(instance)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\fyp\Deployed apis\subjects\api\serializers.py", line 27, in get
+    "teacher_details":TeacherDetailsSerializer(instance.teahcer).data,
+                                               ^^^^^^^^^^^^^^^^
+AttributeError: 'Subjects' object has no attribute 'teahcer'. Did you mean: 'teacher'?
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\subjects\api\serializers.py changed, reloading.
+ERROR:django.request:Internal Server Error: /api/students_of_subjects/
+Traceback (most recent call last):
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\fyp\Deployed apis\subjects\api\views.py", line 25, in get
+    response = serializer.get(instance)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\fyp\Deployed apis\subjects\api\serializers.py", line 28, in get
+    "students_list":StudentDetailsSerializer(instance.semester.batch.student.all, many=True).data,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\serializers.py", line 795, in data
+    ret = super().data
+          ^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\serializers.py", line 249, in data
+    self._data = self.to_representation(self.instance)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\serializers.py", line 713, in to_representation
+    return [
+           ^
+TypeError: 'method' object is not iterable
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\subjects\api\serializers.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\subjects\api\serializers.py changed, reloading.
+ERROR:django.request:Internal Server Error: /api/students_of_subjects/
+Traceback (most recent call last):
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\fields.py", line 437, in get_attribute
+    return get_attribute(instance, self.source_attrs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\fields.py", line 104, in get_attribute
+    instance = getattr(instance, attr)
+               ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CustomUser' object has no attribute 'college_roll_number'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\fyp\Deployed apis\subjects\api\views.py", line 25, in get
+    response = serializer.get(instance)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\fyp\Deployed apis\subjects\api\serializers.py", line 27, in get
+    "students_list":StudentDetailsSerializer(instance.semester.batch.student.all(), many=True).data,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\serializers.py", line 795, in data
+    ret = super().data
+          ^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\serializers.py", line 249, in data
+    self._data = self.to_representation(self.instance)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\serializers.py", line 714, in to_representation
+    self.child.to_representation(item) for item in iterable
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\serializers.py", line 525, in to_representation
+    attribute = field.get_attribute(instance)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\.-\AppData\Local\Programs\Python\Python312\Lib\site-packages\rest_framework\fields.py", line 470, in get_attribute
+    raise type(exc)(msg)
+AttributeError: Got AttributeError when attempting to get a value for field `college_roll_number` on serializer `StudentDetailsSerializer`.
+The serializer field might be named incorrectly and not match any attribute or key on the `CustomUser` instance.
+Original exception text was: 'CustomUser' object has no attribute 'college_roll_number'.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\subjects\api\serializers.py changed, reloading.

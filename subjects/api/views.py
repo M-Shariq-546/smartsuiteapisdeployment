@@ -12,6 +12,19 @@ from .serializers import *
 from .gpts import *
 from .permissions import *
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import generics
+
+class StudentsOfSubjectsView(generics.GenericAPIView):
+    serializer_class = StudentsOfSubjectSerializer
+    permission_classes = [IsTeacherforFile]
+    
+    def get(self, request, *args , **kwargs):
+        subject_id = request.GET.get('subject_id')
+        instance = get_object_or_404(Subjects, id=subject_id)
+        serializer = self.serializer_class()
+        response = serializer.get(instance)
+        return Response(response, status=status.HTTP_200_OK)
+
 
 class SubjectsModelViewSet(ModelViewSet):
     serializer_class = SubjectSerializer

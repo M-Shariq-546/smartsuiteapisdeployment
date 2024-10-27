@@ -24,7 +24,6 @@ build_files.sh
 **/__pycache__/*
 .env
 
-
 */__pycache__/*.py
 !*/__pycache__/__init__.py
 

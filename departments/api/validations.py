@@ -46,7 +46,9 @@ def deletedDepartmentRelatedStuff(department_id):
         Batch.objects.filter(course__department_id=department_id).update(is_active=False)
         Semester.objects.filter(course__department_id=department_id).update(is_active=False)
         Subjects.objects.filter(semester__course__department_id=department_id).update(is_active=False)
-        PDFFiles.objects.filter(subject__semester__course__department_id=department_id).update(is_active=False)
+        PDFFiles.objects.filter(subject__semester__course__department_id=department_id).update(is_active=False)    
         students = CustomUser.objects.filter(batch_students__course__department__id=department_id).delete()
+        teachers = CustomUser.objects.filter(Department_Teacher__in=department_id).delete()
+        print("Teachers List Are to be deleted : ", teachers)
     except Exception as e:
         raise serializers.ValidationError(f"{e}")

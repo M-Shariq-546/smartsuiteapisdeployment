@@ -21,7 +21,7 @@ urlpatterns = [
     path('question/<uuid:question_id>/', EditQuizes.as_view(), name="EditQuestion"),
     path('quiz/', CreateQuizessApiView.as_view(), name='create-quiz'),
     path('quiz/submit/', SubmitQuizView.as_view(), name='submit_quiz'),
-
+    path('students_of_subjects/', StudentsOfSubjectsView.as_view(), name='student_of_subject'),
     path('questions/', QuestionsofQuiz.as_view(), name='questions-of-quiz'),
     path("quiz/<str:quiz_id>/", CreateQuizessApiView.as_view(), name='delete_quiz'),
 ]
