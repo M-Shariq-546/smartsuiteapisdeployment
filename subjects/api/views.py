@@ -141,6 +141,20 @@ class SubjectFilesModelViewSet(ModelViewSet):
 class CreateSummaryApiView(APIView):
     permission_classes = []
 
+    def get(self, request):
+        file = self.request.query_params.get('file')
+        
+        try:
+            summary = DocumentSummary.objects.filter(document__id=file).first()
+            return {
+                'id':summary.id,
+                'keypoints':summary.summary
+            }
+        except:
+            return None
+
+
+
     def log_history(self, request, action, instance, changes=None):
         History.objects.create(
             user = request.user,
@@ -258,6 +272,21 @@ class FileUpdteApiView(APIView):
 class CreateKeypointApiView(APIView):
     permission_classes = []
 
+
+    def get(self, request):
+        file = self.request.query_params.get('file')
+        
+        try:
+            keypoint = DocumentKeypoint.objects.filter(document__id=file).first()
+            return {
+                'id':keypoint.id,
+                'keypoints':keypoint.keypoint
+            }
+        except:
+            return None
+
+
+
     def log_history(self, request, action, instance, changes=None):
         History.objects.create(
             user = request.user,
@@ -307,8 +336,20 @@ class CreateKeypointApiView(APIView):
             except:
                 return Response({"Not Found":"No Associated File Found"}, status=status.HTTP_404_NOT_FOUND)
 
-            content = read_file_content(file.file)
+            print(file)
+            print(file.file)
+            print(file.file.url)
+            print(file.file.path)
+            try:
+                content = read_file_content(file.file)
+            except:
+                content = read_file_content(file.file.url)
+            else:
+                content = read_file_content(file.file.path)
+                
+            print(content)
 
+            
             if content is None:
                 return Response({"error": "Unable to decode file content"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -437,9 +478,19 @@ class CreateQuizessApiView(APIView):
                 return Response(
                     {"error": "Quiz creation limit reached. No more than 5 quizzes allowed for this document."},
                     status=status.HTTP_400_BAD_REQUEST)
-
-
-            content = read_file_content(document.file)
+            
+            print(document)
+            print(document.file)
+            print(document.file.url)
+            print(document.file.path)
+            try:
+                content = read_file_content(document.file)
+            except:
+                content = read_file_content(document.file.url)
+            else:
+                content = read_file_content(document.file.path)
+                
+            print(content)
 
             if content is None:
                 return Response({"error": "Unable to decode file content"},
