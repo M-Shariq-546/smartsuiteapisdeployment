@@ -253,31 +253,38 @@ class CreateSummaryApiView(APIView):
 
 class FileUpdteApiView(APIView):
     serializer_class = PDFSerializers
-    permission_classes = [IsTeacherforFile]
+    permission_classes = []
 
     def get(self,request, id , *args , **kwargs):
-        instance = get_object_or_404(PDFFiles, id=id)
-        serializer = self.serializer_class(instance)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
+        if request.user.role in ['Student' , 'Teacher']:
+            instance = get_object_or_404(PDFFiles, id=id)
+            serializer = self.serializer_class(instance)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({"detail":"You do not have permission to perform this action."},
+                            status=status.HTTP_401_UNAUTHORIZED)
 
     def patch(self, request, id, *args, **kwargs):
-        instance = get_object_or_404(PDFFiles, id=id)
-        data = request.data.copy()
-        data.update(request.FILES)
-
-        serializer = self.serializer_class(instance, data=data, partial=True)  # Use partial=True for patch
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()  # Save the instance
-            return Response({"message": "File updated Successfully"}, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if request.user.role == 'Teacher':
+            instance = get_object_or_404(PDFFiles, id=id)
+            data = request.data.copy()
+            data.update(request.FILES)
+            serializer = self.serializer_class(instance, data=data, partial=True)  # Use partial=True for patch
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()  # Save the instance
+                return Response({"message": "File updated Successfully"}, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"detail":"You do not have permission to perform this action."},
+                            status=status.HTTP_401_UNAUTHORIZED)
 
 
     def delete(self,request, id , *args , **kwargs):
-        instance = get_object_or_404(PDFFiles, id=id)
-        instance.is_active=False
-        instance.save()
-        return Response({"message":"File Deleted Successfully"}, status=status.HTTP_200_OK)
+        if request.user.role == 'Teacher':
+            instance = get_object_or_404(PDFFiles, id=id)
+            instance.is_active=False
+            instance.save()
+            return Response({"message":"File Deleted Successfully"}, status=status.HTTP_200_OK)
+        return Response({"detail":"You do not have permission to perform this action."},
+                            status=status.HTTP_401_UNAUTHORIZED)
 
 
 

@@ -15,15 +15,21 @@ class GroupChat(models.Model):
     def __str__(self):
         return self.name
     
+    class Meta:
+        verbose_name = 'GroupChat'
+        verbose_name_plural = 'GroupChats'
     
 class Message(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
     group_chat = models.ForeignKey(GroupChat, on_delete=models.CASCADE, related_name='messages')
     sender = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='sent_messages')
-    content = models.TextField()
+    comment = models.CharField(max_length=255, null=True, blank=False)
     timestamp = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Message from {self.sender} in {self.group_chat.name}"
 
+    class Meta:
+        verbose_name = 'Message'
+        verbose_name_plural = "Messages"

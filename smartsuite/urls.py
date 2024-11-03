@@ -29,7 +29,7 @@ urlpatterns = [
     path('api/', include('batch.api.urls')),
     path('api/', include('semesters.api.urls')),
     path('api/', include('subjects.api.urls')),
-
+    path('api/', include('group_chats.api.urls')),
     path('api/', include('history.api.urls')),
 ]
 
