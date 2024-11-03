@@ -1,5 +1,32 @@
 from rest_framework import serializers
 from ..models import *
+from accounts.models import CustomDepartmentStudent, CustomDepartmentTeacher
+
+class TeacherDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomDepartmentTeacher
+        fields = '__all__'
+        
+class StudentDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = '__all__'
+
+
+class StudentsOfSubjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subjects
+        fields = '__all__'
+        
+    def get(self, instance):
+        return {
+            "id": instance.id,
+            "name":instance.name,
+            "subject_code":instance.subject_code,
+            "teacher_details":TeacherDetailsSerializer(instance.teacher).data,
+            "students_list":StudentDetailsSerializer(instance.semester.batch.student.all(), many=True).data,
+        }
+
 
 class PDFSerializers(serializers.ModelSerializer):
     class Meta:

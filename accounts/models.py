@@ -93,6 +93,8 @@ class MyAdminSite(AdminSite):
             "Quizes":14,
             "QuizResults":15,
             "Questions":16,
+            "GroupChats":17,
+            "Messages":18,
         }
 
         app_dict = self._build_app_dict(request, app_label)

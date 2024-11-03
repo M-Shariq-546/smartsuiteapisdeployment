@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'subjects',
     'history',
     'corsheaders',
+    'group_chats',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -84,7 +86,7 @@ TEMPLATES = [
         },
     },
 ]
-
+ASGI_APPLICATION = "smartsuite.asgi.application"
 WSGI_APPLICATION = 'smartsuite.wsgi.application'
 
 # Database
@@ -112,6 +114,15 @@ DATABASES = {
         'ENGINE':'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3'
     }
+}
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6380)],
+        },
+    },
 }
 
 
