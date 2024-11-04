@@ -8,7 +8,7 @@ TICKET_TYPE = (
     ('DownTime', 'down_time')
 )
 
-TICKET_TYPE = (
+TICKET_STATUS = (
     ('Pending', 'pending'),
     ('In-Progress', 'in-progress'),
     ('Resolved', 'resolved')
@@ -20,7 +20,7 @@ class AdminSupport(models.Model):
     description = models.CharField(max_length=255)
     title = models.CharField(max_length=255)
     ticket_type = models.CharField(max_length=20, default='', choices=TICKET_TYPE)
-    ticket_status = models.CharField(max_length=20, default='Pending', choices=TICKET_TYPE)
+    ticket_status = models.CharField(max_length=20, default='Pending', choices=TICKET_STATUS)
     submit_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='admin_support_ticket_sender')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -37,6 +37,7 @@ class TicketConversation(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
     message = models.CharField(max_length=255)
     ticket = models.ForeignKey(AdminSupport, on_delete=models.CASCADE, related_name='ticket_conversation')
+    sender = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='admin_chat')
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):

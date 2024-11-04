@@ -31,6 +31,7 @@ urlpatterns = [
     path('api/', include('subjects.api.urls')),
     path('api/', include('group_chats.api.urls')),
     path('api/', include('history.api.urls')),
+    path('api/', include('admin_support.api.urls'))
 ]
 
 
