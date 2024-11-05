@@ -2,7 +2,7 @@ from rest_framework import generics  , status
 from rest_framework.response import Response
 from admin_support.models import AdminSupport
 from .serializers import *
-
+from departments.api.permissions import IsSuperAdmin
 class AdminSupportView(generics.GenericAPIView):
     serializer_class = AdminSupportSerializer
     permission_classes = []
@@ -41,4 +41,14 @@ class TicketConversationView(generics.GenericAPIView):
             serializer = self.serializer_class(chats, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({'message':"No Data Found"}, status=status.HTTP_404_NOT_FOUND)
-    
+
+class UpdateTicketView(generics.GenericAPIView):
+    serializer_class = AdminSupportSerializer
+    permission_classes = [IsSuperAdmin]
+
+    def patch(self, request, *args, **kwargs):
+        ticket_id = request.GET.get('ticket_id')
+        instance = AdminSupport.objects.get(ticket_id=ticket_id)
+        instance.ticket_status = 'Resolved'
+        instance.save()
+        return Response({'message':f"Ticket {instance.ticket_id} has been resolved and closed successfully"}, status=status.HTTP_200_OK)
