@@ -42,3 +42,15 @@ class TicketConversationView(generics.GenericAPIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({'message':"No Data Found"}, status=status.HTTP_404_NOT_FOUND)
     
+    
+class ResolveTicketView(generics.GenericAPIView):
+    serializer_class = TicketResolveSerializer
+    permission_classes  = []
+    
+    def patch(self, request, *args , **kwargs):
+        ticket_id = request.data.get('ticket_id')
+        if request.user.is_superuser:
+            instance = AdminSupport.objects.get(ticket_id=ticket_id)
+            serializer = self.serializer_class(instance, partial=True)
+            return Response({'message':f"The ticket against {ticket_id} has been resolved successfully"}, status=status.HTTP_200_OK)
+        return Response({'message':"You are not authorized for this request"}, status=status.HTTP_401_UNAUTHORIZED)    
