@@ -55,6 +55,7 @@ To run this Django application locally, follow the steps below:
 
 Clone the Repository
 ```
+
 git clone https://github.com/M-Shariq-546/SmartSuiteBackend.git
 cd smartsuite
 ```
@@ -64,7 +65,6 @@ Create a Virtual Environment
 python -m venv venv
 source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 ```
-
 
 Install Dependencies
 ```
@@ -76,12 +76,12 @@ Run Makemigrations
 python manage.py makemigrations
 ```
 
-Run Migrations
+Run Migrations for table ceation
 ```
 python manage.py migrate
 ```
 
-Create a Superuser
+Create a Superuser for admin panel access
 ```
 python manage.py createsuperuser
 ```
@@ -118,5 +118,10 @@ Create a new branch for your feature or bug fix.
 Commit your changes.
 Push the branch to your forked repository.
 Open a pull request against the main branch.
-License
+
+
+## License
 This project is licensed under the MIT License. See the LICENSE file for details.
+
+### Rights
+All rights reserved by Muhammad Shariq Shafiq

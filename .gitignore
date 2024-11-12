@@ -32,3 +32,7 @@ build_files.sh
 
 **migrations/*
 **__pycache__/*
+
+db.sqlite3
+app.log
+README.md

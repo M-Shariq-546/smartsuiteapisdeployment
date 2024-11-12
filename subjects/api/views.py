@@ -156,7 +156,7 @@ class CreateSummaryApiView(APIView):
 
     def get(self, request):
         file = self.request.query_params.get('file')
-        
+
         try:
             summary = DocumentSummary.objects.filter(document__id=file).first()
             return {
@@ -295,7 +295,7 @@ class CreateKeypointApiView(APIView):
 
     def get(self, request):
         file = self.request.query_params.get('file')
-        
+
         try:
             keypoint = DocumentKeypoint.objects.filter(document__id=file).first()
             return {
@@ -366,10 +366,10 @@ class CreateKeypointApiView(APIView):
                 content = read_file_content(file.file.url)
             else:
                 content = read_file_content(file.file.path)
-                
+
             print(content)
 
-            
+
             if content is None:
                 return Response({"error": "Unable to decode file content"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -498,7 +498,7 @@ class CreateQuizessApiView(APIView):
                 return Response(
                     {"error": "Quiz creation limit reached. No more than 5 quizzes allowed for this document."},
                     status=status.HTTP_400_BAD_REQUEST)
-            
+
             print(document)
             print(document.file)
             print(document.file.url)
@@ -509,7 +509,7 @@ class CreateQuizessApiView(APIView):
                 content = read_file_content(document.file.url)
             else:
                 content = read_file_content(document.file.path)
-                
+
             print(content)
 
             if content is None:
