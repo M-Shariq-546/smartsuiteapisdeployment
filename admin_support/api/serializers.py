@@ -33,3 +33,15 @@ class AdminSupportChatSerializer(serializers.ModelSerializer):
                 
         new_conversation = TicketConversation.objects.create(**validated_data)
         return new_conversation
+    
+    
+class TicketResolveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdminSupport
+        fields = ['ticket_status']
+        
+    def update(self, instance):
+        instance.ticket_status = 'Resolved'
+        instance.save()
+        
+        return instance
