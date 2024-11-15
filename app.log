@@ -1788,3 +1788,25 @@ WARNING:django.request:Not Found: /ws/chat/e6190b4e-907c-4494-a619-ccbfd05e76ac/
 WARNING:django.request:Not Found: /ws/chat/e6190b4e-907c-4494-a619-ccbfd05e76ac/
 WARNING:django.request:Not Found: /ws/chat/e6190b4e-907c-4494-a619-ccbfd05e76ac/
 INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/smartsuite/settings.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\group_chats\api\serializers.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\group_chats\api\serializers.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\group_chats\api\views.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\group_chats\api\views.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\group_chats\api\views.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\group_chats\api\urls.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\group_chats\api\views.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\group_chats\api\views.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\group_chats\api\serializers.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\group_chats\api\serializers.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\group_chats\api\serializers.py changed, reloading.
+WARNING:django.request:Bad Request: /api/select-group-members/
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\group_chats\api\views.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\subjects\api\serializers.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\subjects\api\serializers.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\subjects\api\serializers.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\group_chats\api\serializers.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\group_chats\api\serializers.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\group_chats\api\serializers.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\notifications\models.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\smartsuite\urls.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\notifications\api\views.py changed, reloading.

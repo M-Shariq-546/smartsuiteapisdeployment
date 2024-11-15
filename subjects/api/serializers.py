@@ -1,6 +1,9 @@
 from rest_framework import serializers
 from ..models import *
+import threading
+from .thread import *
 from accounts.models import CustomDepartmentStudent, CustomDepartmentTeacher
+from notifications.models import Notification
 
 class TeacherDetailsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -45,7 +48,9 @@ class PDFSerializers(serializers.ModelSerializer):
             new_file.save()
             new_files.append(new_file)
         responses = []
+        subject_name = ''
         for new_file in new_files:
+            subject_name = new_file 
             response = {
                 'id':new_file.id,
                 'subject':new_file.subject.name,
@@ -54,6 +59,10 @@ class PDFSerializers(serializers.ModelSerializer):
                 'is_active':new_file.is_active
             }
             responses.append(response)
+        notification_thread = threading.Thread(
+                target=NotificationCreationAndSending,
+                args=("New File Uploaded",f"A new file has been uploaded in {subject_name.subject.name}. Please Check it out",subject_name, self.context['request'].user)  # Pass necessary arguments to the thread
+            ).start()
         return responses, new_file
 
     def update(self, instance, validated_data):
@@ -73,6 +82,11 @@ class PDFSerializers(serializers.ModelSerializer):
         else:
             raise serializers.ValidationError("File Or Name is Required")
 
+        notification_thread = threading.Thread(
+                target=NotificationCreationAndSending,
+                args=("A File Updated",f"A file has been updated in {instance.subject.name}. Please Check it out",instance, self.context['request'].user)  # Pass necessary arguments to the thread
+            ).start()
+        
         return instance
 
 

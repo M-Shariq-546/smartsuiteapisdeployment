@@ -35,6 +35,8 @@ build_files.sh
 subject/api/gpts.py
 
 
+subjects/api/gpts.py
+
 db.sqlite3
 app.log
 README.md

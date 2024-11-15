@@ -6,5 +6,6 @@ urlpatterns = [
     path('group/', GroupGetUpdateDelete.as_view(), name='group'),
     path('groups/', CreateGroupChatView.as_view(), name='group'),
     path('send-message/', MessagesView.as_view(), name='send-message'),
-    path('get-messages/', MessagesView.as_view(), name='get-messages')
+    path('get-messages/', MessagesView.as_view(), name='get-messages'),
+    path('select-group-members/', AddMembersApiView.as_view(), name='select-members'),
 ]

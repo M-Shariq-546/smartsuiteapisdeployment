@@ -103,3 +103,17 @@ class MessagesView(generics.GenericAPIView):
             return Response({'message': "No Data Found"}, status=status.HTTP_404_NOT_FOUND)
         return Response({'message':"You are logged out. Please login again."}, status=status.HTTP_401_UNAUTHORIZED)    
  
+ 
+class AddMembersApiView(generics.GenericAPIView):
+    permission_classes = []
+    
+    def get(self, request, *args , **kwargs):
+        try:
+            if request.user.role == 'Teacher':
+                subject_id = request.GET.get('subject_id')
+                instance = Subjects.objects.get(id=subject_id)
+                serializer = StudentDataSerializer(instance.semester.batch.student.all(), many=True)
+                return Response({'message':"Data Fetched Successfully", "data":serializer.data}, status=status.HTTP_200_OK) 
+            return Response({'message':"You are not authorized for this request"}, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            return Response({'message':f"{e}"}, status=status.HTTP_400_BAD_REQUEST)

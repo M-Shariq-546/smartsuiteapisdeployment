@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'group_chats',
     'channels',
     'admin_support',
+    'notifications',
 ]
 
 MIDDLEWARE = [
