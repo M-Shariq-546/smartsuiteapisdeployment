@@ -45,6 +45,18 @@ jobs:
         python manage.py migrate
         echo "✅ Migrate command executed successfully."
 
+    - name: Debug SSH Setup
+      run: |
+        echo "🔍 Debugging SSH Setup..."
+        mkdir -p ~/.ssh  
+        echo "${{ secrets.PYTHONANYWHERE_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H ssh.pythonanywhere.com >> ~/.ssh/known_hosts
+        echo "📂 Checking SSH Connection..."
+        ssh -o StrictHostKeyChecking=no ${{ secrets.PYTHONANYWHERE_USERNAME }}@ssh.pythonanywhere.com "echo 'SSH Connection Successful'"
+    
+
+
     - name: Deploy to PythonAnywhere
       env:
         PYTHONANYWHERE_USERNAME: ${{ secrets.PYTHONANYWHERE_USERNAME }}
@@ -54,6 +66,8 @@ jobs:
 
         # Define your app directory on PythonAnywhere (this may vary)
         APP_DIR="/home/${{ secrets.PYTHONANYWHERE_USERNAME }}/smartsuiteapisdeployment"
+
+        ssh ${{ secrets.PYTHONANYWHERE_USERNAME }}@ssh.pythonanywhere.com "mkdir -p $APP_DIR"
 
         mkdir -p ~/.ssh  
         echo "${{ secrets.PYTHONANYWHERE_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
