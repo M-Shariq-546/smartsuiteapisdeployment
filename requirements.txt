@@ -109,3 +109,5 @@ Werkzeug
 wheel
 wrapt
 yarl
+channels
+channels-redis
