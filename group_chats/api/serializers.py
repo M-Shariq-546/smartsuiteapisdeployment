@@ -1,4 +1,8 @@
+from notifications.models import *
+from subjects.api.thread import *
+import threading
 from rest_framework import serializers
+from subjects.models import Subjects
 from ..models import *
 from django.db import transaction
 from accounts.models import CustomUser
@@ -23,6 +27,11 @@ class ChatGroupSerializer(serializers.ModelSerializer):
             new_group_chat.students.set(students_list)
             new_group_chat.save()
         
+            threading.Thread(
+                target=NotificationCreationAndSendingForMessage,
+                args=("New Group Chat Created",f"Group has been created by with name {new_group_chat.name}", new_group_chat.admin_of_chat, new_group_chat)  # Pass necessary arguments to the thread
+            ).start()
+
         return new_group_chat        
         
     def update(self, instance , validated_data):
@@ -43,7 +52,12 @@ class ChatGroupSerializer(serializers.ModelSerializer):
         for student in students:
             instance.students.add(student)
             instance.save()
-            
+
+        threading.Thread(
+                target=NotificationCreationAndSendingForMessage,
+                args=("Group Chat Updated","Group has been updated", instance.admin_of_chat, instance)  # Pass necessary arguments to the thread
+        ).start()
+        
         return instance
     
 class MessagesSerializer(serializers.ModelSerializer):
@@ -55,4 +69,13 @@ class MessagesSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         with transaction.atomic():
             new_message = Message.objects.create(**validated_data)
+            threading.Thread(
+                target=NotificationCreationAndSendingForMessage,
+                args=("New Message",f"{new_message.comment[:15]}...", new_message.sender, new_message.group_chat)  # Pass necessary arguments to the thread
+            ).start()
         return new_message
+    
+class StudentDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = '__all__'

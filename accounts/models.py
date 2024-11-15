@@ -98,6 +98,7 @@ class MyAdminSite(AdminSite):
             "Admin_Supports":19,
             "Ticket Conversations":20,
             "Notifications":21,
+            "Notification Statuses":22,
         }
 
         app_dict = self._build_app_dict(request, app_label)
