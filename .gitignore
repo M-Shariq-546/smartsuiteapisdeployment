@@ -32,6 +32,8 @@ build_files.sh
 
 **migrations/*
 **__pycache__/*
+subject/api/gpts.py
+
 
 db.sqlite3
 app.log
