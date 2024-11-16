@@ -1,3 +1,5 @@
+import threading
+
 from rest_framework.viewsets import ModelViewSet
 from ..models import *
 from rest_framework.views import APIView
@@ -89,7 +91,7 @@ class AssignTeacherToSubject(APIView):
 
     def patch(self, request, id,*args,**kwargs):
         instance = get_object_or_404(Subjects, pk=id)
-        serializer = self.serializer_class(instance, data=request.data, partial=True)
+        serializer = self.serializer_class(instance, data=request.data, partial=True, context={'request':request})
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response({"message":"Subject Updated Successfully"}, status=status.HTTP_200_OK)
@@ -245,6 +247,7 @@ class CreateSummaryApiView(APIView):
                     prompt=_,
                     added_by=self.request.user
             )
+            threading.Thread(target=SummaryCreatedNotification, args=('File Summary Generated',f"The Summary for the document generated please check it out!" , self.request.user, file.subject)).start()
             self.log_history(request, "CREATE", created_summary, f"Summary Created")
             return Response({"id": created_summary.id, "summary": f"{created_summary.summary}",
                                  "prompt": f"{created_summary.prompt}"}, status=status.HTTP_200_OK)
@@ -391,6 +394,7 @@ class CreateKeypointApiView(APIView):
                     prompt=_,
                     added_by=self.request.user
             )
+            threading.Thread(target=KeypointsCreatedNotification, args=('File Keypoints Generated',f"The Keypoints for the document generated please check it out!" , self.request.user, file.subject)).start()
             self.log_history(request, "CREATE", created_keypoint, f"Keypoints Created")
             return Response({"id": created_keypoint.id, "summary": f"{created_keypoint.keypoint}",
                                  "prompt": f"{created_keypoint.prompt}"}, status=status.HTTP_200_OK)
@@ -537,6 +541,7 @@ class CreateQuizessApiView(APIView):
                 document=document,
                 added_by=self.request.user
             )
+            threading.Thread(target=QuizCreatedNotification, args=('File Quiz Generated',f"The Quiz for the document generated please check it out!" , self.request.user, document.subject)).start()
             self.log_history(request, "CREATE", created_quiz, f"Quiz Created")
             possible_formats = ["Question:", "question:", "Question 1:", "q:"]
             questions_data = []
@@ -627,6 +632,7 @@ class UploadQuiz(APIView):
         if quiz:
             quiz.upload = True
             quiz.save()
+            threading.Thread(target=QuizCreatedNotification, args=('Quiz has Been Uploaded', f"The quiz has been uploaded", request_user, quiz.document.subject))
             return Response({"message": "Quiz is Successfully uploaded or updated", "id": quiz.id},
                             status=status.HTTP_202_ACCEPTED)
         return Response({"Not Found": "No quiz found"}, status=status.HTTP_404_NOT_FOUND)
@@ -749,6 +755,7 @@ class SubmitQuizView(APIView):
                 quiz=document,
                 defaults={'score': score, 'status': status_test, 'total':total_questions, 'obtained':correct_answers}
             )
+            threading.Thread(target=QuizCompletion, args=('Quiz has Been Taken', f"The quiz has been taken by student {self.request.user.first_name} {self.request.user.last_name}", request_user, quiz.document.subject))
             self.log_history(request, "UPDATE", quiz_result, f"Quiz Attempted")
             return Response({"message":"Successfully submitted","Score": score, "Status": status_test}, status=status.HTTP_200_OK)
         else:

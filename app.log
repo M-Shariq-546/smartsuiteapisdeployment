@@ -1810,3 +1810,7 @@ INFO:django.utils.autoreload:D:\fyp\Deployed apis\group_chats\api\serializers.py
 INFO:django.utils.autoreload:D:\fyp\Deployed apis\notifications\models.py changed, reloading.
 INFO:django.utils.autoreload:D:\fyp\Deployed apis\smartsuite\urls.py changed, reloading.
 INFO:django.utils.autoreload:D:\fyp\Deployed apis\notifications\api\views.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\subjects\api\views.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\subjects\api\thread.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\subjects\api\views.py changed, reloading.
+                                                                                                                                                                                                                                                                                                                                                                                      INFO:django.utils.autoreload:D:\fyp\Deployed apis\subjects\api\views.py changed, reloading.
