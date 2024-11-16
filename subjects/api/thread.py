@@ -1,6 +1,7 @@
 from notifications.models import *
 
 def NotificationCreationAndSending(request_user, subject_name, title, description):
+    print('================== Thread for file added/updated started')
     new_notification = Notification.objects.create(
                 title = title,
                 description = description,
@@ -16,7 +17,10 @@ def NotificationCreationAndSending(request_user, subject_name, title, descriptio
             user=student,
             notification = new_notification,
         )
-        
+    print('================== Thread for file added/updated started')
+    return {'message':'success'}
+
+
 def NotificationCreationAndSendingForMessage(title, description, request_user, group_chat):
     new_notification = Notification.objects.create(
                 title = title,
@@ -33,7 +37,7 @@ def NotificationCreationAndSendingForMessage(title, description, request_user, g
             user=student,
             notification = new_notification,
         )
-
+    return {'message': 'success'}
 
 def TeacherAssignedToSubject(title, description, request_user, subject):
     new_notification = Notification.objects.create(
@@ -51,6 +55,7 @@ def TeacherAssignedToSubject(title, description, request_user, subject):
             user=student,
             notification=new_notification,
         )
+    return {'message': 'success'}
 
 def SummaryCreatedNotification(title, description , request_user, subject):
     new_notification = Notification.objects.create(
@@ -68,6 +73,7 @@ def SummaryCreatedNotification(title, description , request_user, subject):
             user=student,
             notification=new_notification,
         )
+    return {'message': 'success'}
 
 def KeypointsCreatedNotification(title, description , request_user, subject):
     new_notification = Notification.objects.create(
@@ -85,6 +91,7 @@ def KeypointsCreatedNotification(title, description , request_user, subject):
             user=student,
             notification=new_notification,
         )
+    return {'message': 'success'}
 
 def QuizCreatedNotification(title, description , request_user, subject):
     new_notification = Notification.objects.create(
@@ -102,7 +109,7 @@ def QuizCreatedNotification(title, description , request_user, subject):
             user=student,
             notification=new_notification,
         )
-
+    return {'message': 'success'}
 
 def QuizCompletion(title, description , request_user, subject):
     new_notification = Notification.objects.create(
@@ -119,3 +126,4 @@ def QuizCompletion(title, description , request_user, subject):
         user=teacher,
         notification=new_notification,
     )
+    return {'message': 'success'}
