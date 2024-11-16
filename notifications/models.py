@@ -4,6 +4,7 @@ from accounts.models import CustomUser
 
 NOTIFICATION_TYPES = (
     ('file', 'file'),
+    ('teacher', 'teacher'),
     ('chat', 'chat'),
     ('summary', 'summary'),
     ('keypoint', 'keypoint'),

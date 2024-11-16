@@ -4,6 +4,8 @@ import threading
 from .thread import *
 from accounts.models import CustomDepartmentStudent, CustomDepartmentTeacher
 from notifications.models import Notification
+from .thread import *
+import threading
 
 class TeacherDetailsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -117,6 +119,7 @@ class SubjectSerializer(serializers.ModelSerializer):
         return new_subject
 
     def update(self, instance , validated_data):
+        request = self.context.get('request')
         name = validated_data.pop('name', instance.name)
         teacher = validated_data.pop('teacher', None)
         if teacher and name:
@@ -126,6 +129,7 @@ class SubjectSerializer(serializers.ModelSerializer):
                 instance.name = name
             instance.teacher = teacher
             instance.save()
+            threading.Thread(target=TeacherAssignedToSubject, args=('New Teacher Added',f"Mr./Mrs. {instance.teacher.first_name} {instance.teacher.last_name} Added as New Teacher for {instance.name}" , request.user, instance)).start()
         elif teacher is not None:
             instance.teacher = teacher
             instance.save()
