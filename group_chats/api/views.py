@@ -22,9 +22,9 @@ class CreateGroupChatView(generics.GenericAPIView):
             return Response({'message': "You are logged out. Please login again."}, status=status.HTTP_401_UNAUTHORIZED)
         # Filter GroupChats based on user role
         if request.user.role == 'Teacher':
-            query_set = GroupChat.objects.filter(admin_of_chat=request.user)
+            query_set = GroupChat.objects.filter(admin_of_chat=request.user, is_active=True)
         elif request.user.role == 'Student':
-            query_set = GroupChat.objects.filter(students=request.user)
+            query_set = GroupChat.objects.filter(students=request.user, is_active=True)
         else:
             return Response({'message': "Invalid role."}, status=status.HTTP_403_FORBIDDEN)        
         # Check if any GroupChats were found
@@ -41,9 +41,12 @@ class GroupGetUpdateDelete(generics.GenericAPIView):
     def get(self, request, *args , **kwargs):
         if request.user.is_authenticated:
             group_id = request.GET.get('group_chat_id')
-            instance = GroupChat.objects.get(id=group_id, is_active=True)
-            serializer = ChatGroupSerializer(instance)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            print('============ group_id', group_id)
+            instance = GroupChat.objects.filter(id=group_id, is_active=True).first()
+            if instance:
+                serializer = ChatGroupSerializer(instance)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response({'message':"Not Found or Group is Deleted"}, status=status.HTTP_404_NOT_FOUND)
         return Response({'message':"You are being Logged out Please Login and Try"}, status=status.HTTP_401_UNAUTHORIZED)
         
     def patch(self, request, *args , **kwargs):

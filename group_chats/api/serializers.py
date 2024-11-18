@@ -7,7 +7,19 @@ from ..models import *
 from django.db import transaction
 from accounts.models import CustomUser
 
+class studentSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField(read_only=True)
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'name']
+        
+    def get_name(self, obj):
+        return f"{obj.first_name} {obj.last_name}"
+
 class ChatGroupSerializer(serializers.ModelSerializer):
+    admin_of_chat = serializers.SerializerMethodField()
+    students = serializers.SerializerMethodField()
+
     class Meta:
         model = GroupChat
         fields = '__all__'
@@ -19,6 +31,16 @@ class ChatGroupSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"Permission Error": "Only a Teacher can be the admin of the group"})
         
         return attrs
+
+    def get_admin_of_chat(self, instance):
+        return {
+            "id": instance.admin_of_chat.id,
+            "name": f"{instance.admin_of_chat.first_name} {instance.admin_of_chat.last_name}"
+        }
+
+    def get_students(self, instance):
+        # Assuming studentSerializer is defined elsewhere
+        return studentSerializer(instance.students.all(), many=True).data
     
     def create(self, valiadated_data):
         students_list = valiadated_data.pop('students', [])
@@ -32,8 +54,34 @@ class ChatGroupSerializer(serializers.ModelSerializer):
                 args=("New Group Chat Created",f"Group has been created by with name {new_group_chat.name}", new_group_chat.admin_of_chat, new_group_chat)  # Pass necessary arguments to the thread
             ).start()
 
-        return new_group_chat        
+        return {
+                'id':new_group_chat.id,
+                "name":new_group_chat.name,
+                "description":new_group_chat.description,
+                "restricted_chat":new_group_chat.restricted_chat,
+                "admin_of_chat":{
+                    "id":new_group_chat.admin_of_chat.id,
+                    "name":f"{new_group_chat.admin_of_chat.first_name} {new_group_chat.admin_of_chat.last_name}"
+                    },
+                "students":studentSerializer(new_group_chat.students.all(), many=True),
+                "created_at":new_group_chat.created_at,
+                }        
         
+    def get(self, instance):
+        return {
+                'id':instance.id,
+                "name":instance.name,
+                "description":instance.description,
+                "restricted_chat":instance.restricted_chat,
+                "admin_of_chat":{
+                    "id":instance.admin_of_chat.id,
+                    "name":f"{instance.admin_of_chat.first_name} {instance.admin_of_chat.last_name}"
+                    },
+                "students":studentSerializer(instance.students.all(), many=True),
+                "created_at":instance.created_at,
+                }        
+        
+    
     def update(self, instance , validated_data):
         name = validated_data.get('name', instance.name)
         description = validated_data.get('description', instance.description)
@@ -58,7 +106,18 @@ class ChatGroupSerializer(serializers.ModelSerializer):
                 args=("Group Chat Updated","Group has been updated", instance.admin_of_chat, instance)  # Pass necessary arguments to the thread
         ).start()
         
-        return instance
+        return {
+                'id':new_group_chat.id,
+                "name":new_group_chat.name,
+                "description":new_group_chat.description,
+                "restricted_chat":new_group_chat.restricted_chat,
+                "admin_of_chat":{
+                    "id":new_group_chat.admin_of_chat.id,
+                    "name":f"{new_group_chat.admin_of_chat.first_name} {new_group_chat.admin_of_chat.last_name}"
+                    },
+                "students":studentSerializer(new_group_chat.students.all(), many=True),
+                "created_at":new_group_chat.created_at,
+                }
     
 class MessagesSerializer(serializers.ModelSerializer):
     class Meta:
