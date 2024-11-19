@@ -33,6 +33,7 @@ urlpatterns = [
     path('api/', include('history.api.urls')),
     path('api/', include('admin_support.api.urls')),
     path('api/', include('notifications.api.urls')),
+    path('api/', include('announcement.api.urls')),
 ]
 
 

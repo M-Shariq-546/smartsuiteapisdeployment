@@ -17,7 +17,7 @@ class Accouncements(models.Model):
     description = models.TextField()
     type = models.CharField(max_length=255 , default='', choices=ANNOUNCEMENT_TYPES)
     announced_by = models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING, related_name='announced_by')
-    to_users = models.ManyToManyField(CustomUser, related_name='to-list-accouncement')
+    to_users = models.ManyToManyField(CustomUser, related_name='to_list_accouncement')
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
