@@ -54,18 +54,7 @@ class ChatGroupSerializer(serializers.ModelSerializer):
                 args=("New Group Chat Created",f"Group has been created by with name {new_group_chat.name}", new_group_chat.admin_of_chat, new_group_chat)  # Pass necessary arguments to the thread
             ).start()
 
-        return {
-                'id':new_group_chat.id,
-                "name":new_group_chat.name,
-                "description":new_group_chat.description,
-                "restricted_chat":new_group_chat.restricted_chat,
-                "admin_of_chat":{
-                    "id":new_group_chat.admin_of_chat.id,
-                    "name":f"{new_group_chat.admin_of_chat.first_name} {new_group_chat.admin_of_chat.last_name}"
-                    },
-                "students":studentSerializer(new_group_chat.students.all(), many=True),
-                "created_at":new_group_chat.created_at,
-                }        
+        return new_group_chat
         
     def get(self, instance):
         return {

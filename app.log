@@ -2322,3 +2322,7 @@ Traceback (most recent call last):
     raise TypeError(f'Object of type {o.__class__.__name__} '
 TypeError: Object of type ListSerializer is not JSON serializable
 INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/announcement/api/serializers.py changed, reloading.
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/subjects/api/views.py changed, reloading.
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/notifications/api/views.py changed, reloading.
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/subjects/api/views.py changed, reloading.
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/group_chats/api/serializers.py changed, reloading.
