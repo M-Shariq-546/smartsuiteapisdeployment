@@ -12,7 +12,7 @@ class NotificationsListView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     
     def get(self, request, *args , **kwargs):
-        instances = Notification.objects.filter(users__in=request.user)
+        instances = Notification.objects.filter(notificationstatus__user=request.user)
         if not instances:
             return Response({'message':"No Record Found"}, status=status.HTTP_404_NOT_FOUND)    
         serializer = self.serializer_class(instances , many=True)

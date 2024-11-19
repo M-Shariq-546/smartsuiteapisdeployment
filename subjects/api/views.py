@@ -632,7 +632,7 @@ class UploadQuiz(APIView):
         if quiz:
             quiz.upload = True
             quiz.save()
-            threading.Thread(target=QuizCreatedNotification, args=('Quiz has Been Uploaded', f"The quiz has been uploaded", request_user, quiz.document.subject))
+            threading.Thread(target=QuizCreatedNotification, args=('Quiz has Been Uploaded', f"The quiz has been uploaded", self.request.user, quiz.document.subject))
             return Response({"message": "Quiz is Successfully uploaded or updated", "id": quiz.id},
                             status=status.HTTP_202_ACCEPTED)
         return Response({"Not Found": "No quiz found"}, status=status.HTTP_404_NOT_FOUND)
