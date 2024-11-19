@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'channels',
     'admin_support',
     'notifications',
+    'announcement',
 ]
 
 MIDDLEWARE = [

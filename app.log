@@ -2023,3 +2023,302 @@ INFO:django.utils.autoreload:D:\fyp\Deployed apis\group_chats\api\views.py chang
 WARNING:django.request:Not Found: /api/group/
 INFO:django.utils.autoreload:D:\fyp\Deployed apis\group_chats\api\serializers.py changed, reloading.
 INFO:django.utils.autoreload:D:\fyp\Deployed apis\accounts\models.py changed, reloading.
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/smartsuite/urls.py changed, reloading.
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/smartsuite/settings.py changed, reloading.
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/announcement/api/serializers.py changed, reloading.
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/announcement/api/serializers.py changed, reloading.
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/announcement/api/views.py changed, reloading.
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/announcement/api/views.py changed, reloading.
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/announcement/models.py changed, reloading.
+ERROR:django.request:Internal Server Error: /api/announcement/
+Traceback (most recent call last):
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 354, in execute
+    return super().execute(query, params)
+sqlite3.OperationalError: no such table: announcement_accouncements
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/announcement/api/views.py", line 19, in get
+    if instances:
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/db/models/query.py", line 414, in __bool__
+    self._fetch_all()
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/db/models/query.py", line 1928, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1574, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 354, in execute
+    return super().execute(query, params)
+django.db.utils.OperationalError: no such table: announcement_accouncements
+ERROR:django.request:Internal Server Error: /api/announcement/
+Traceback (most recent call last):
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/announcement/api/views.py", line 22, in get
+    return Response({'message':"No Record Found"},status=status.HTTP_404_NOT_FOUND)
+NameError: name 'status' is not defined
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/announcement/api/views.py changed, reloading.
+WARNING:django.request:Not Found: /api/announcement/
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/announcement/api/views.py changed, reloading.
+WARNING:django.request:Bad Request: /api/announcement/
+WARNING:django.request:Bad Request: /api/announcement/
+WARNING:django.request:Bad Request: /api/announcement/
+WARNING:django.request:Not Found: /pk/
+WARNING:django.request:Not Found: /favicon.ico/
+ERROR:django.request:Internal Server Error: /admin/
+Traceback (most recent call last):
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/contrib/admin/sites.py", line 260, in wrapper
+    return self.admin_view(view, cacheable)(*args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/contrib/admin/sites.py", line 241, in inner
+    return view(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/contrib/admin/sites.py", line 557, in index
+    app_list = self.get_app_list(request)
+  File "/home/shariq/HS/smartsuiteapisdeployment/accounts/models.py", line 112, in get_app_list
+    app['models'].sort(key=lambda x: ordering[x['name']])
+  File "/home/shariq/HS/smartsuiteapisdeployment/accounts/models.py", line 112, in <lambda>
+    app['models'].sort(key=lambda x: ordering[x['name']])
+KeyError: 'Notifications Statuses'
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/accounts/models.py changed, reloading.
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/announcement/admin.py changed, reloading.
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/announcement/admin.py changed, reloading.
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/announcement/admin.py changed, reloading.
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/announcement/admin.py changed, reloading.
+ERROR:django.request:Internal Server Error: /api/announcement/
+Traceback (most recent call last):
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/announcement/api/views.py", line 13, in post
+    serializer.save(announced_by=request.user)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 208, in save
+    self.instance = self.create(validated_data)
+  File "/home/shariq/HS/smartsuiteapisdeployment/announcement/api/serializers.py", line 26, in create
+    new_announcement = Accouncements.objects.create(**validated_data)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/db/models/query.py", line 677, in create
+    obj = self.model(**kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/db/models/base.py", line 543, in __init__
+    _setattr(self, field.name, rel_obj)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/db/models/fields/related_descriptors.py", line 287, in __set__
+    raise ValueError(
+ValueError: Cannot assign "<django.contrib.auth.models.AnonymousUser object at 0x7fac7f1af460>": "Accouncements.announced_by" must be a "CustomUser" instance.
+ERROR:django.request:Internal Server Error: /api/announcement/
+Traceback (most recent call last):
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/announcement/api/views.py", line 13, in post
+    serializer.save(announced_by=request.user)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 208, in save
+    self.instance = self.create(validated_data)
+  File "/home/shariq/HS/smartsuiteapisdeployment/announcement/api/serializers.py", line 26, in create
+    new_announcement = Accouncements.objects.create(**validated_data)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/db/models/query.py", line 677, in create
+    obj = self.model(**kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/db/models/base.py", line 564, in __init__
+    _setattr(self, prop, value)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/db/models/fields/related_descriptors.py", line 665, in __set__
+    raise TypeError(
+TypeError: Direct assignment to the forward side of a many-to-many set is prohibited. Use to_users.set() instead.
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/announcement/api/serializers.py changed, reloading.
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/announcement/api/serializers.py changed, reloading.
+ERROR:django.request:Internal Server Error: /api/announcement/
+Traceback (most recent call last):
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/announcement/api/views.py", line 14, in post
+    return Response(serializer.data, status=status.HTTP_200_OK)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 571, in data
+    ret = super().data
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 249, in data
+    self._data = self.to_representation(self.instance)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 538, in to_representation
+    ret[field.field_name] = field.to_representation(attribute)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/fields.py", line 1869, in to_representation
+    method = getattr(self.parent, self.method_name)
+AttributeError: 'CreateAnnouncementSerializer' object has no attribute 'get_announced_by'
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/announcement/api/serializers.py changed, reloading.
+ERROR:django.request:Internal Server Error: /api/announcement/
+Traceback (most recent call last):
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/announcement/api/views.py", line 14, in post
+    return Response(serializer.data, status=status.HTTP_200_OK)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 571, in data
+    ret = super().data
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 249, in data
+    self._data = self.to_representation(self.instance)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 538, in to_representation
+    ret[field.field_name] = field.to_representation(attribute)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/fields.py", line 1870, in to_representation
+    return method(value)
+  File "/home/shariq/HS/smartsuiteapisdeployment/announcement/api/serializers.py", line 36, in get_to_list
+    return UsersListSerializer(obj.to_list.all(), many=True)
+AttributeError: 'Accouncements' object has no attribute 'to_list'
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/announcement/api/serializers.py changed, reloading.
+ERROR:django.request:Internal Server Error: /api/announcement/
+Traceback (most recent call last):
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shariq/HS/smartsuiteapisdeployment/announcement/api/views.py", line 13, in post
+    serializer.save(announced_by=request.user)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/serializers.py", line 208, in save
+    self.instance = self.create(validated_data)
+  File "/home/shariq/HS/smartsuiteapisdeployment/announcement/api/serializers.py", line 25, in create
+    users = validated_data.pop('to_users')
+KeyError: 'to_users'
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/announcement/api/serializers.py changed, reloading.
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/announcement/api/serializers.py changed, reloading.
+ERROR:django.request:Internal Server Error: /api/announcement/
+Traceback (most recent call last):
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/response.py", line 74, in rendered_content
+    ret = renderer.render(self.data, accepted_media_type, context)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/renderers.py", line 100, in render
+    ret = json.dumps(
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/utils/json.py", line 25, in dumps
+    return json.dumps(*args, **kwargs)
+  File "/usr/lib/python3.10/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+  File "/usr/lib/python3.10/json/encoder.py", line 199, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/usr/lib/python3.10/json/encoder.py", line 257, in iterencode
+    return _iterencode(o, 0)
+  File "/home/shariq/HS/smartsuiteapisdeployment/.venv/lib/python3.10/site-packages/rest_framework/utils/encoders.py", line 67, in default
+    return super().default(obj)
+  File "/usr/lib/python3.10/json/encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type ListSerializer is not JSON serializable
+INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/announcement/api/serializers.py changed, reloading.
