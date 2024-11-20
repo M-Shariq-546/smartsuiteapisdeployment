@@ -2326,3 +2326,9 @@ INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/subjects/a
 INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/notifications/api/views.py changed, reloading.
 INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/subjects/api/views.py changed, reloading.
 INFO:django.utils.autoreload:/home/shariq/HS/smartsuiteapisdeployment/group_chats/api/serializers.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\accounts\models.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\announcement\api\views.py changed, reloading.
+WARNING:django.request:Not Found: /announcement-type/
+WARNING:django.request:Not Found: /api/announcement-type/
+WARNING:django.request:Unauthorized: /api/announcement-types/
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\announcement\api\views.py changed, reloading.
