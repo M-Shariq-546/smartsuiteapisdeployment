@@ -2332,3 +2332,4 @@ WARNING:django.request:Not Found: /announcement-type/
 WARNING:django.request:Not Found: /api/announcement-type/
 WARNING:django.request:Unauthorized: /api/announcement-types/
 INFO:django.utils.autoreload:D:\fyp\Deployed apis\announcement\api\views.py changed, reloading.
+INFO:django.utils.autoreload:D:\fyp\Deployed apis\subjects\api\views.py changed, reloading.

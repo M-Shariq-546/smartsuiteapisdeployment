@@ -755,7 +755,7 @@ class SubmitQuizView(APIView):
                 quiz=document,
                 defaults={'score': score, 'status': status_test, 'total':total_questions, 'obtained':correct_answers}
             )
-            threading.Thread(target=QuizCompletion, args=('Quiz has Been Taken', f"The quiz has been taken by student {self.request.user.first_name} {self.request.user.last_name}", request_user, quiz.document.subject))
+            threading.Thread(target=QuizCompletion, args=('Quiz has Been Taken', f"The quiz has been taken by student {self.request.user.first_name} {self.request.user.last_name}", self.request.user, document.document.subject))
             self.log_history(request, "UPDATE", quiz_result, f"Quiz Attempted")
             return Response({"message":"Successfully submitted","Score": score, "Status": status_test}, status=status.HTTP_200_OK)
         else:
