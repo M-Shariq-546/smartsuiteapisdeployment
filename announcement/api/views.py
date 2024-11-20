@@ -20,3 +20,18 @@ class AnnouncementCreateAPIView(generics.CreateAPIView):
             serializer = self.get_serializer(instances, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({'message':"No Record Found"},status=status.HTTP_404_NOT_FOUND)
+    
+
+ANNOUNCEMENT_TYPES = (
+    ('exams', 'exams'),
+    ('holiday', 'holiday'),
+    ('emergency', 'emergency'),
+    ('fun-day', 'fun-day'),
+    ('paper-date', 'paper-date'),
+)
+
+class AnnouncementTypesView(generics.GenericAPIView):
+    permission_classes = []
+    def get(self, request, *args , **kwargs):
+        types = [{'id': key, 'name': value} for key, value in ANNOUNCEMENT_TYPES]
+        return Response(types, status=status.HTTP_200_OK)
