@@ -2333,3 +2333,16 @@ WARNING:django.request:Not Found: /api/announcement-type/
 WARNING:django.request:Unauthorized: /api/announcement-types/
 INFO:django.utils.autoreload:D:\fyp\Deployed apis\announcement\api\views.py changed, reloading.
 INFO:django.utils.autoreload:D:\fyp\Deployed apis\subjects\api\views.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\hamza\OneDrive\Desktop\Smartsuite\smartsuiteapisdeployment\admin_support\api\urls.py changed, reloading.
+WARNING:django.request:Not Found: /
+WARNING:django.request:Not Found: /favicon.ico
+INFO:django.utils.autoreload:C:\Users\hamza\OneDrive\Desktop\Smartsuite\smartsuiteapisdeployment\admin_support\api\urls.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\hamza\OneDrive\Desktop\Smartsuite\smartsuiteapisdeployment\admin_support\api\urls.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\hamza\OneDrive\Desktop\Smartsuite\smartsuiteapisdeployment\admin_support\admin.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\hamza\OneDrive\Desktop\Smartsuite\smartsuiteapisdeployment\admin_support\admin.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\hamza\OneDrive\Desktop\Smartsuite\smartsuiteapisdeployment\group_chats\api\serializers.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\hamza\OneDrive\Desktop\Smartsuite\smartsuiteapisdeployment\group_chats\api\serializers.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\hamza\OneDrive\Desktop\Smartsuite\smartsuiteapisdeployment\admin_support\api\views.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\hamza\OneDrive\Desktop\Smartsuite\smartsuiteapisdeployment\admin_support\api\views.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\hamza\OneDrive\Desktop\Smartsuite\smartsuiteapisdeployment\admin_support\api\views.py changed, reloading.
+INFO:django.utils.autoreload:C:\Users\hamza\OneDrive\Desktop\Smartsuite\smartsuiteapisdeployment\admin_support\api\views.py changed, reloading.
