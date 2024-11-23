@@ -96,16 +96,16 @@ class ChatGroupSerializer(serializers.ModelSerializer):
         ).start()
         
         return {
-                'id':new_group_chat.id,
-                "name":new_group_chat.name,
-                "description":new_group_chat.description,
-                "restricted_chat":new_group_chat.restricted_chat,
+                'id':instance.id,
+                "name":instance.name,
+                "description":instance.description,
+                "restricted_chat":instance.restricted_chat,
                 "admin_of_chat":{
-                    "id":new_group_chat.admin_of_chat.id,
-                    "name":f"{new_group_chat.admin_of_chat.first_name} {new_group_chat.admin_of_chat.last_name}"
+                    "id":instance.admin_of_chat.id,
+                    "name":f"{instance.admin_of_chat.first_name} {instance.admin_of_chat.last_name}"
                     },
-                "students":studentSerializer(new_group_chat.students.all(), many=True),
-                "created_at":new_group_chat.created_at,
+                "students":studentSerializer(instance.students.all(), many=True),
+                "created_at":instance.created_at,
                 }
     
 class MessagesSerializer(serializers.ModelSerializer):

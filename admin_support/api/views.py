@@ -35,7 +35,7 @@ class TicketConversationView(generics.GenericAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def get(self, request, *args , **kwargs):
-        ticket_id = request.data.get('ticket_id')
+        ticket_id = request.GET.get('ticket_id')
         print(' =============== ticket id ', ticket_id)
         chats = TicketConversation.objects.filter(ticket__ticket_id=ticket_id)
         if chats:
@@ -49,7 +49,7 @@ class ResolveTicketView(generics.GenericAPIView):
     permission_classes  = []
     
     def patch(self, request, *args , **kwargs):
-        ticket_id = request.data.get('ticket_id')
+        ticket_id = request.GET.get('ticket_id')
         if request.user.is_superuser:
             instance = AdminSupport.objects.get(ticket_id=ticket_id)
             serializer = self.serializer_class(instance, partial=True)
