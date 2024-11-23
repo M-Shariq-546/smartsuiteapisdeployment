@@ -1,3 +1,4 @@
+import random
 from rest_framework import generics  , status
 from rest_framework.response import Response
 from admin_support.models import AdminSupport
@@ -54,3 +55,28 @@ class ResolveTicketView(generics.GenericAPIView):
             serializer = self.serializer_class(instance, partial=True)
             return Response({'message':f"The ticket against {ticket_id} has been resolved successfully"}, status=status.HTTP_200_OK)
         return Response({'message':"You are not authorized for this request"}, status=status.HTTP_401_UNAUTHORIZED)    
+    
+    
+TICKET_TYPE = (
+    ('Account', 'account'),
+    ('GroupChat', 'group_chat'),
+    ('DownTime', 'down_time')
+)
+    
+class TicketTypesView(generics.GenericAPIView):
+    permission_classes = []
+    
+    def get(self, request, *args , **kwargs):
+        types = [{'id': key, 'name': value} for key, value in TICKET_TYPE]
+        return Response(types, status=status.HTTP_200_OK)
+    
+    
+class TicketIdView(generics.GenericAPIView):
+    permission_classes = []
+    
+    def get(self, request, *args , **kwargs):
+        while True:
+            random_id = random.randint(1000, 9999)
+            ticket_id = f'TK#{random_id}'
+            if not AdminSupport.objects.filter(ticket_id=ticket_id).exists(): 
+                return Response({'id':f"{ticket_id}"}, status=status.HTTP_200_OK)

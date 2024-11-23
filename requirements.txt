@@ -42,22 +42,22 @@ flatbuffers
 fonttools
 frozenlist
 gunicorn
-idna
-iniconfig
-ipykernel
-ipython
-jedi
-joblib
-jsonpatch
-jsonpointer
-kiwisolver
-kombu
-Markdown
-markdown-it-py
-MarkupSafe
-mypy-extensions
-namex
-nest-asyncio
+# idna
+# iniconfig
+# ipykernel
+# ipython
+# jedi
+# joblib
+# jsonpatch
+# jsonpointer
+# kiwisolver
+# kombu
+# Markdown
+# markdown-it-py
+# MarkupSafe
+# mypy-extensions
+# namex
+# nest-asyncio
 oauthlib
 openai==0.28.0
 opt-einsum
@@ -73,8 +73,8 @@ protobuf
 psutil
 pure-eval
 pycparser
-pydantic
-pydantic_core
+# pydantic
+# pydantic_core
 Pygments
 PyJWT
 pyparsing
@@ -95,12 +95,12 @@ setuptools
 six
 sniffio
 stack-data
-tqdm
-traitlets
-typing-inspect
-typing_extensions
-tzdata
-tzlocal
+# tqdm
+# traitlets
+# typing-inspect
+# typing_extensions
+# tzdata
+# tzlocal
 urllib3
 vine
 virtualenv
